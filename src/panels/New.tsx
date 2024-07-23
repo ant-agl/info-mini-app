@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   Div,
   Group,
@@ -16,7 +16,6 @@ import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export const New: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
-  const [date, setDate] = useState(() => new Date());
 
   return (
     <Panel id={id}>
@@ -75,7 +74,6 @@ export const New: FC<NavIdProps> = ({ id }) => {
             <FormItem top="Выставите дату и время публикации">
               <DateInput
                 disablePast enableTime closeOnChange
-                value={date} onChange={setDate}
               />
             </FormItem>
           </FormLayoutGroup>
