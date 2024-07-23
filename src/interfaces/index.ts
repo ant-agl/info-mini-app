@@ -1,3 +1,4 @@
-import type Ticket from "./tickets";
+import type Ticket from "./ticket";
+import type TicketForm from "./ticketForm";
 
-export { Ticket };
+export type { Ticket, TicketForm };

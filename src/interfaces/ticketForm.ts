@@ -1,8 +1,8 @@
 export default interface Ticket {
-  id: number;
+  id?: number;
   title: string;
   description: string;
-  image: string;
+  image: File | undefined;
   files: File[];
   tags: string[];
   date: number;

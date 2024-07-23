@@ -14,7 +14,7 @@ import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import { getTickets } from '../api/api';
 import type { Ticket } from '../interfaces';
-import {TicketCard} from '../components/TicketCard/TicketCard';
+import { TicketCard } from '../components/TicketCard/TicketCard';
 
 export const Home: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
