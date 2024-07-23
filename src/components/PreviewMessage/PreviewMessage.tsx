@@ -1,8 +1,4 @@
 import { FC } from 'react';
-import {
-  ContentCard,
-  EllipsisText,
-} from '@vkontakte/vkui';
 import type { Ticket } from '../../interfaces';
 import { Icon20DocumentOutline } from '@vkontakte/icons';
 import "./PreviewMessage.css";

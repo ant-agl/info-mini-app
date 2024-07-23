@@ -70,3 +70,39 @@ export function addTicket(data: TicketForm): Promise<number> {
       });
   });
 }
+
+export function sendForRevision(id: number) {
+  return new Promise((resolve, reject) => {
+    if (dev) {
+      resolve(true);
+      return;
+    }
+
+    api.post("/send-revision", { id })
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
+export function sendForPublication(id: number) {
+  return new Promise((resolve, reject) => {
+    if (dev) {
+      resolve(true);
+      return;
+    }
+
+    api.post("/send-publication", { id })
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
