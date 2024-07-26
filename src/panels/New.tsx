@@ -18,6 +18,7 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
 import { Icon24Camera, Icon24Document, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline, Icon16DeleteOutline } from '@vkontakte/icons';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket } from "../api/api";
+import MDEditor from '@uiw/react-md-editor';
 
 export const New: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
@@ -99,14 +100,15 @@ export const New: FC<NavIdProps> = ({ id }) => {
             status={isStatus(description)}
             required
           >
-            <Textarea
+            {/* <Textarea
               id="description"
               name="description"
               placeholder="Введите описание тикета"
               value={description}
               required
               onChange={(e) => setDescription(e.currentTarget.value)}
-            />
+            /> */}
+            <MDEditor value={description} onChange={(e) => setDescription(e!)} />
           </FormItem>
           <FormLayoutGroup mode="horizontal">
             <FormItem
