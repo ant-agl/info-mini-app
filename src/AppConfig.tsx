@@ -4,6 +4,9 @@ import { AdaptivityProvider, ConfigProvider, AppRoot } from '@vkontakte/vkui';
 import { RouterProvider } from '@vkontakte/vk-mini-apps-router';
 import '@vkontakte/vkui/dist/vkui.css';
 
+import { Provider } from 'react-redux';
+import store from './store';
+
 import { transformVKBridgeAdaptivity } from './utils';
 import { router } from './routes';
 import { App } from './App';
@@ -22,11 +25,13 @@ export const AppConfig = () => {
       hasCustomPanelHeaderAfter={true}
     >
       <AdaptivityProvider {...adaptivity}>
-        <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
-          <RouterProvider router={router}>
-            <App />
-          </RouterProvider>
-        </AppRoot>
+        <Provider store={store}>
+          <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
+            <RouterProvider router={router}>
+              <App />
+            </RouterProvider>
+          </AppRoot>
+        </Provider>
       </AdaptivityProvider>
     </ConfigProvider>
   );

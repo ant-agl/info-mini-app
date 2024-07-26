@@ -15,14 +15,23 @@ import { Icon28AddOutline } from '@vkontakte/icons';
 import { getTickets } from '../api/api';
 import type { Ticket } from '../interfaces';
 import { TicketCard } from '../components/TicketCard/TicketCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { setTickets } from '../store';
 
 export const Home: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const tickets = useSelector((state: RootState) => state.tickets.tickets);
 
   useEffect(() => {
-    getTickets().then((t) => setTickets(t));
-  }, []);
+    if (tickets.length === 0) {
+      getTickets().then((t) => {
+        dispatch(setTickets(t))
+      });
+    }
+  }, [dispatch, tickets.length]);
 
   return (
     <Panel id={id}>
