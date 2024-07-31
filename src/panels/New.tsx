@@ -4,7 +4,6 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   Group,
   FormItem,
   Input,
-  Textarea,
   File,
   DateInput,
   Button,
@@ -25,7 +24,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | undefined>(undefined);
+  const [images, setImages] = useState<File[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState([]);
   const [date, setDate] = useState<Date>(() => new Date());
@@ -37,15 +36,28 @@ export const New: FC<NavIdProps> = ({ id }) => {
     return val ? 'valid' : 'error'
   }
 
-  const handleImage = (file: File | undefined) => {
+  const handleImages = (newFiles: FileList | null) => {
     const types = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
     setIsImageError(false);
-    if (!file || !types.includes(file.type)) {
+    let isError = false;
+
+    if (newFiles) {
+      for (let i = 0; i < newFiles?.length; i++) {
+        if (!types.includes(newFiles[0].type)) isError = true;
+      }
+    }
+
+    if (!newFiles || isError) {
       setIsImageError(true);
       return;
     }
+
     setIsImageError(false);
-    setImage(file);
+    setImages(prevFiles => [...prevFiles, ...Array.from(newFiles)]);
+  }
+
+  const deleteImage = (index: number) => {
+    setImages(prevFiles => prevFiles.filter((_, i) => i !== index));
   }
 
   const handleFiles = (newFiles: FileList | null) => {
@@ -63,7 +75,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
     if (!title || !description) return;
 
     const data = {
-      title, description, image, files,
+      title, description, images, files,
       tags,
       date: Math.floor(date.getTime() / 1000)
     };
@@ -122,16 +134,21 @@ export const New: FC<NavIdProps> = ({ id }) => {
                 }
                 size="m"
                 id="image"
-                onChange={(e) => handleImage(e.currentTarget?.files?.[0])}
+                onChange={(e) => handleImages(e.currentTarget?.files)}
+                multiple
               >
                 Открыть галерею
               </File>
-              {image &&
-                <Image src={URL.createObjectURL(image)} size={180} style={{ marginTop: 10 }}>
-                  <Image.Overlay onClick={() => setImage(undefined)}>
-                    <Icon20DeleteOutline width={32} height={32} />
-                  </Image.Overlay>
-                </Image>
+              {images.length > 0 &&
+                <Flex gap={7} style={{ marginTop: 10 }}>
+                  {images.map((image, i) => (
+                    <Image src={URL.createObjectURL(image)} size={60} key={i}>
+                      <Image.Overlay onClick={() => deleteImage(i)}>
+                        <Icon20DeleteOutline width={28} height={28} />
+                      </Image.Overlay>
+                    </Image>
+                  ))}
+                </Flex>
               }
             </FormItem>
             <FormItem

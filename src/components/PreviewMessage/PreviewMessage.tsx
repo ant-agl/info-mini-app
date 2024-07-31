@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import type { Ticket } from '../../interfaces';
+import { GridAvatar } from '@vkontakte/vkui';
 import { Icon20DocumentOutline } from '@vkontakte/icons';
 import "./PreviewMessage.css";
 
@@ -15,9 +16,17 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
   return (
     <div>
       <div className="message">
-        {ticket.image &&
+        {ticket.images.length > 0 &&
+          ticket.images.map(image => (
+            <div className="message__img">
+              <img src={URL.createObjectURL(image)} />
+            </div>
+          ))
+        }
+
+        {ticket.images.length > 0 &&
           <div className="message__img">
-            <img src={ticket.image} />
+            <GridAvatar src={ticket.images.slice(0, 3).map(i => URL.createObjectURL(i))} />
           </div>
         }
 

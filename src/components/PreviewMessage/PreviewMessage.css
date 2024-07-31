@@ -80,3 +80,9 @@
 .file__size {
   opacity: 0.8;
 }
+
+.vkuiGridAvatar {
+  width: 100% !important;
+  height: 200px !important;
+  border-radius: 0;
+}
