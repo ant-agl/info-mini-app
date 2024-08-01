@@ -75,9 +75,13 @@ export const New: FC<NavIdProps> = ({ id }) => {
     if (!title || !description) return;
 
     const data = {
-      title, description, images, files,
-      tags,
-      date: Math.floor(date.getTime() / 1000)
+      title,
+      content: description,
+      groups: tags,
+      time: Math.floor(date.getTime() / 1000),
+      media: null,
+      // images,
+      // files,
     };
     console.log(data);
 

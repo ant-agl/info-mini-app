@@ -1,54 +1,44 @@
 import axios from "axios";
 import type { Ticket, TicketForm } from "../interfaces";
 import { tickets } from "./mockData";
-import bencode from 'bencode';
+import bencode from "bencode";
+import blake from "blakejs";
 
 const dev = true;
+const login = "admin";
+const password = "qwerty";
+const token = btoa(`${login}:${blake.blake2bHex(password, undefined, 64)}`);
 
 const api = axios.create({
-  baseURL: "http://localhost:4200",
+  baseURL: "http://37.46.135.206:1234/" + token,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+    Accept: "application/x-bittorrent",
+    "Content-Type": "application/x-bittorrent",
   },
 });
 
 export function getTickets(): Promise<Ticket[]> {
   return new Promise((resolve, reject) => {
     if (dev) {
-      // const res = "ld7:authorsl5:admine7:content757:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit lacus ut orci tempus, a suscipit dui ultrices. Donec at enim lectus. Nunc sit amet mi elit. Sed condimentum massa non bibendum luctus. Quisque id turpis interdum, scelerisque lectus nec, maximus neque. In hendrerit lorem leo, pulvinar cursus tellus tincidunt eget. Duis rutrum egestas consequat. Pellentesque accumsan sapien velit, in vestibulum massa accumsan commodo. Sed sodales aliquam sollicitudin. Aenean gravida, lacus at elementum rhoncus, metus velit porttitor ante, in congue eros arcu ac mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam vel ornare erat. Nullam congue tellus lorem, ut rutrum lectus egestas sit amet. Quisque vulputate sagittis velit.6:groupsl3:alle5:index52:2024_07_18-02_56_41_0027f95a7a5998a5269eee3bbdb78bfe5:mediale4:timei1721030792e5:title68:Тестирование системы информированияee";
-      // const data = bencode.decode( res, 'utf8' );
-      // console.log(data);
       resolve(tickets);
       return;
     }
 
-    api.get("/tickets")
+    api.get("/wmc")
       .then(res => {
-        resolve(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        reject(err);
-      });
-  });
-}
-
-export function getTicket(id: number): Promise<Ticket> {
-  return new Promise((resolve, reject) => {
-    if (dev) {
-      const ticket = tickets.find(t => t.id == id);
-      if (!ticket) {
-        reject();
-        return;
-      }
-      resolve(ticket);
-      return;
-    }
-
-    api.get("/ticket/" + id)
-      .then(res => {
-        resolve(res.data);
+        const decodeRes = bencode.decode( res.data, 'utf8' );
+        const data: Ticket[] = [];
+        decodeRes.forEach((item: TicketForm) => {
+          data.push({
+            title: item.title,
+            description: item.content,
+            tags: item.groups,
+            date: item.time,
+            media: null,
+          });
+        });
+        console.log(data);
+        resolve(data);
       })
       .catch((err) => {
         console.log(err);
@@ -64,8 +54,13 @@ export function addTicket(data: TicketForm): Promise<number> {
       return;
     }
 
-    api.post("/add-ticket", data)
+
+    const bencoded = new TextDecoder('latin1').decode(bencode.encode(data))
+    console.log(bencoded);
+    // debugger;
+    api.post("/new", bencoded)
       .then(res => {
+        console.log('res.data', res.data);
         resolve(res.data);
       })
       .catch((err) => {
@@ -75,14 +70,16 @@ export function addTicket(data: TicketForm): Promise<number> {
   });
 }
 
-export function sendForRevision(id: number) {
+export function sendForRevision(id: number, reason: string) {
   return new Promise((resolve, reject) => {
     if (dev) {
       resolve(true);
       return;
     }
 
-    api.post("/send-revision", { id })
+    const bencoded = new TextDecoder('latin1').decode(bencode.encode(reason));
+    console.log(bencoded);
+    api.post("/reject/" + id) // bencode строка с правками
       .then(res => {
         resolve(res.data);
       })
@@ -100,7 +97,7 @@ export function sendForPublication(id: number) {
       return;
     }
 
-    api.post("/send-publication", { id })
+    api.post("/approve/" + id)
       .then(res => {
         resolve(res.data);
       })

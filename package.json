@@ -21,12 +21,14 @@
     "@vkontakte/vkui": "^6.0.0",
     "axios": "^1.7.2",
     "bencode": "^4.0.0",
+    "blakejs": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1"
   },
   "devDependencies": {
+    "@types/bencode": "^2.0.4",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
