@@ -4,16 +4,19 @@ import { tickets } from "./mockData";
 import bencode from "bencode";
 import blake from "blakejs";
 
-const dev = true;
+const dev = false;
 const login = "admin";
 const password = "qwerty";
 const token = btoa(`${login}:${blake.blake2bHex(password, undefined, 64)}`);
 
 const api = axios.create({
-  baseURL: "http://37.46.135.206:1234/" + token,
+  // baseURL: "http://37.46.135.206:1234/" + token,
+  baseURL: "https://donstu.ant-agl.ru/" + token,
   headers: {
-    Accept: "application/x-bittorrent",
+    // Accept: "application/x-bittorrent",
     "Content-Type": "application/x-bittorrent",
+    Accept: "text/plain, */*",
+    // "Content-Type": "text/plain",
   },
 });
 
@@ -54,10 +57,7 @@ export function addTicket(data: TicketForm): Promise<number> {
       return;
     }
 
-
     const bencoded = new TextDecoder('latin1').decode(bencode.encode(data))
-    console.log(bencoded);
-    // debugger;
     api.post("/new", bencoded)
       .then(res => {
         console.log('res.data', res.data);
@@ -77,9 +77,7 @@ export function sendForRevision(id: number, reason: string) {
       return;
     }
 
-    const bencoded = new TextDecoder('latin1').decode(bencode.encode(reason));
-    console.log(bencoded);
-    api.post("/reject/" + id) // bencode строка с правками
+    api.post("/reject/" + id, bencode.encode(reason))
       .then(res => {
         resolve(res.data);
       })

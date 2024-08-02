@@ -26,7 +26,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [files, setFiles] = useState<File[]>([]);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState<{value: string, label: string}[]>([]);
   const [date, setDate] = useState<Date>(() => new Date());
   const [isSend, setIsSend] = useState(false);
   const [isImageError, setIsImageError] = useState(false);
@@ -77,9 +77,9 @@ export const New: FC<NavIdProps> = ({ id }) => {
     const data = {
       title,
       content: description,
-      groups: tags,
+      groups: tags.map(t => t.value),
       time: Math.floor(date.getTime() / 1000),
-      media: null,
+      media: [],
       // images,
       // files,
     };
