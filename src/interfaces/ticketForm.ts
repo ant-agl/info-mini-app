@@ -4,5 +4,5 @@ export default interface Ticket {
   content: string;
   groups: string[];
   time: number;
-  media: File[] | null;
+  media: (string | ArrayBuffer)[] | null;
 }

@@ -11,11 +11,12 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   ChipsInput,
   IconButton,
   Image,
-  Subhead,
+  // Subhead,
   Flex,
   Textarea,
  } from '@vkontakte/vkui';
-import { Icon24Camera, Icon24Document, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline, Icon16DeleteOutline } from '@vkontakte/icons';
+import { Icon24Camera, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline } from '@vkontakte/icons';
+// Icon24Document Icon16DeleteOutline
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket } from "../api/api";
 
@@ -25,7 +26,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const [files, setFiles] = useState<File[]>([]);
+  // const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState<{value: string, label: string}[]>([]);
   const [date, setDate] = useState<Date>(() => new Date());
   const [isSend, setIsSend] = useState(false);
@@ -60,28 +61,38 @@ export const New: FC<NavIdProps> = ({ id }) => {
     setImages(prevFiles => prevFiles.filter((_, i) => i !== index));
   }
 
-  const handleFiles = (newFiles: FileList | null) => {
-    if (newFiles)
-      setFiles(prevFiles => [...prevFiles, ...Array.from(newFiles)]);
+  // const handleFiles = (newFiles: FileList | null) => {
+  //   if (newFiles)
+  //     setFiles(prevFiles => [...prevFiles, ...Array.from(newFiles)]);
+  // }
+
+  // const deleteFile = (index: number) => {
+  //   setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+  // }
+
+  const readFiles = async (files: File[]): Promise<ArrayBuffer[]> => {
+    const readFile = (file: File): Promise<ArrayBuffer> => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+
+    return Promise.all(files.map(readFile));
   }
 
-  const deleteFile = (index: number) => {
-    setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
-  }
-
-  const sendForm = () => {
+  const sendForm = async () => {
     setIsSend(true);
 
     if (!title || !description) return;
 
+    const fileBuffers = await readFiles(images);
     const data = {
       title,
       content: description,
       groups: tags.map(t => t.value),
       time: Math.floor(date.getTime() / 1000),
-      media: [],
-      // images,
-      // files,
+      media: fileBuffers,
     };
     console.log(data);
 
@@ -165,7 +176,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
                 </Flex>
               }
             </FormItem>
-            <FormItem
+            {/* <FormItem
               top="Загрузите документы (при необходимости)"
             >
               <File
@@ -188,7 +199,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
                   </IconButton>
                 </Flex>
               ))}
-            </FormItem>
+            </FormItem> */}
           </FormLayoutGroup>
           <FormLayoutGroup mode="horizontal">
             <FormItem top="Теги (введите и нажмите enter)">
