@@ -18,108 +18,6 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
 import { Icon24Camera, Icon24Document, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline, Icon16DeleteOutline } from '@vkontakte/icons';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket } from "../api/api";
-import MDEditor from '@uiw/react-md-editor';
-import { remark } from 'remark';
-import remarkParse from 'remark-parse';
-import Markdown from 'react-markdown'
-import MarkdownIt from 'markdown-it';
-import markdownItHighlightjs from 'markdown-it-highlightjs';
-
-
-interface MarkdownNode extends Node {
-  type: string;
-  value?: string;
-  children?: MarkdownNode[];
-}
-function transformToTelegramMarkdown(markdown: string): string {
-  // Разбор Markdown в синтаксическое дерево (AST)
-  const tree = remark().use(remarkParse).parse(markdown);
-
-  // Рекурсивная функция для обхода дерева и создания строки
-  function formatNode(node: MarkdownNode, depth: number = 0): string {
-    const indent = ' '.repeat(depth * 2); // Уровень отступа для списка и цитат
-
-    switch (node.type) {
-      case 'text':
-        // return node.value || '';
-        return node.value?.replace(/~~(.*?)~~/g, '~$1~') || '';
-
-      case 'strong':
-        return `*${node.children?.map(child => formatNode(child, depth)).join('')}*`;
-
-      case 'emphasis':
-        return `_${node.children?.map(child => formatNode(child, depth)).join('')}_`;
-
-      case 'delete':
-        return `~${node.children?.map(child => formatNode(child, depth)).join('')}~`;
-
-      case 'inlineCode':
-        return `\`${node.value || ''}\``;
-
-      case 'code':
-        return `\n\`\`\`\n${node.value || ''}\n\`\`\``;
-
-      case 'blockquote':
-        return `\n${indent}> ${node.children?.map(child => formatNode(child, depth)).join(`\n${indent}> `)}\n`;
-
-      case 'list':
-        return node.children?.map(child =>
-          child.type === 'listItem' ? `${indent}• ${formatNode(child, depth + 1)}` : ''
-        ).join('\n') || '';
-
-      case 'listItem':
-        return node.children?.map(child => formatNode(child, depth)).join('') || '';
-
-      case 'paragraph':
-        // Добавление новой строки перед и после параграфа
-        return `${node.children?.map(child => formatNode(child, depth)).join('')} \n`;
-
-      default:
-        return node.children?.map(child => formatNode(child, depth)).join('') || '';
-    }
-  }
-
-  // Запуск обхода с корневого узла
-  return formatNode(tree as MarkdownNode).trim();
-}
-
-const md = new MarkdownIt({
-    html: false,
-    linkify: true,
-    typographer: true,
-  })
-  .use(markdownItHighlightjs);
-
-  // Кастомный рендерер для поддержки MarkdownV2
-  md.renderer.rules.em_open = () => '<em>';
-  md.renderer.rules.em_close = () => '</em>';
-  md.renderer.rules.strong_open = () => '<b>';
-  md.renderer.rules.strong_close = () => '</b>';
-  md.renderer.rules.link_open = (tokens, idx) => {
-    const href = tokens[idx].attrGet('href');
-    return `<a href="${href}">`;
-  };
-  md.renderer.rules.link_close = () => '</a>';
-
-  // Экранирование специфических символов для MarkdownV2
-  const escapeMarkdown = (text: string) => {
-    return text
-      .replace(/_/g, '\\_')
-      .replace(/\*\*/g, '*')
-      .replace(/\[/g, '\\[')
-      .replace(/\]/g, '\\]')
-      .replace(/\(/g, '\\(')
-      .replace(/\)/g, '\\)')
-      .replace(/~/g, '\\~')
-      .replace(/`/g, '\\`')
-      .replace(/>/g, '\\>')
-      .replace(/#/g, '\\#')
-      .replace(/\+/g, '\\+')
-      .replace(/-/g, '\\-')
-      .replace(/!/g, '\\!')
-      .replace(/</g, '\\<')
-      .replace(/>/g, '\\>');
-  };
 
 export const New: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
@@ -176,12 +74,9 @@ export const New: FC<NavIdProps> = ({ id }) => {
 
     if (!title || !description) return;
 
-    console.log(description);
-    console.log(transformToTelegramMarkdown(description));
-
     const data = {
       title,
-      content: transformToTelegramMarkdown(description),
+      content: description,
       groups: tags.map(t => t.value),
       time: Math.floor(date.getTime() / 1000),
       media: [],
@@ -240,9 +135,6 @@ export const New: FC<NavIdProps> = ({ id }) => {
               maxHeight={300}
               onChange={(e) => setDescription(e.currentTarget.value)}
             />
-            {/* <MDEditor value={description} onChange={(e) => setDescription(e!)} />
-            <Markdown>{description}</Markdown>
-            <div dangerouslySetInnerHTML={{ __html: md.render(escapeMarkdown(description)) }} /> */}
           </FormItem>
           <FormLayoutGroup mode="horizontal">
             <FormItem
