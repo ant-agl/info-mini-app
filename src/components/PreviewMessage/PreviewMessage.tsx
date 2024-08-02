@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import type { Ticket } from '../../interfaces';
 import { GridAvatar } from '@vkontakte/vkui';
-import { Icon20DocumentOutline } from '@vkontakte/icons';
+// import { Icon20DocumentOutline } from '@vkontakte/icons';
 import "./PreviewMessage.css";
 
 interface PreviewMessageType {
@@ -16,17 +16,9 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
   return (
     <div>
       <div className="message">
-        {ticket.images.length > 0 &&
-          ticket.images.map(image => (
-            <div className="message__img">
-              <img src={URL.createObjectURL(image)} />
-            </div>
-          ))
-        }
-
-        {ticket.images.length > 0 &&
+        {(ticket.media && ticket.media.length > 0) &&
           <div className="message__img">
-            <GridAvatar src={ticket.images.slice(0, 3).map(i => URL.createObjectURL(i))} />
+            <GridAvatar src={ticket.media.slice(0, 3).map(i => URL.createObjectURL(i))} />
           </div>
         }
 
@@ -41,7 +33,7 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
           <div className="message__date">{getDate(ticket.date)}</div>
         </div>
       </div>
-      {ticket.files.length > 0 &&
+      {/* {ticket.files.length > 0 &&
         <div className="message">
           <div className="message__content">
             {ticket.files.map(file => (
@@ -58,7 +50,7 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
             <div className="message__date">{getDate(ticket.date)}</div>
           </div>
         </div>
-      }
+      } */}
     </div>
   )
 };
