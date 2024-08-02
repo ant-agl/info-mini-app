@@ -86,7 +86,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
     console.log(data);
 
     addTicket(data).then(() => {
-      // routeNavigator.push('/');
+      routeNavigator.push('/');
     });
   }
 
