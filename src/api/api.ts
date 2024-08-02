@@ -13,10 +13,8 @@ const api = axios.create({
   // baseURL: "http://37.46.135.206:1234/" + token,
   baseURL: "https://donstu.ant-agl.ru/" + token,
   headers: {
-    // Accept: "application/x-bittorrent",
     "Content-Type": "application/x-bittorrent",
     Accept: "text/plain, */*",
-    // "Content-Type": "text/plain",
   },
 });
 
@@ -50,18 +48,18 @@ export function getTickets(): Promise<Ticket[]> {
   });
 }
 
-export function addTicket(data: TicketForm): Promise<number> {
+export function addTicket(data: TicketForm): Promise<void> {
   return new Promise((resolve, reject) => {
     if (dev) {
-      resolve(0);
+      resolve();
       return;
     }
 
-    const bencoded = new TextDecoder('latin1').decode(bencode.encode(data))
-    api.post("/new", bencoded)
+    // const bencoded = new TextDecoder('latin1').decode(bencode.encode(data));
+    api.post("/new", bencode.encode(data))
       .then(res => {
         console.log('res.data', res.data);
-        resolve(res.data);
+        resolve();
       })
       .catch((err) => {
         console.log(err);
