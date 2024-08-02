@@ -19,7 +19,8 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
 
   useEffect(() => {
     if (params && params.id) {
-      const existingTicket = tickets.find(t => t.id === +params.id!);
+      // const existingTicket = tickets.find(t => t.id === +params.id!);
+      const existingTicket = tickets[+params.id!];
       if (existingTicket) {
         setTicket(existingTicket);
       } else {

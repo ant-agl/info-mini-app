@@ -2,7 +2,7 @@ export default interface Ticket {
   id?: number;
   title: string;
   description: string;
-  media: File[] | null;
+  media: string[];
   tags: string[];
   date: number;
 }

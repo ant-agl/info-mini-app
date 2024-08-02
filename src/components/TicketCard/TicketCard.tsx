@@ -7,19 +7,20 @@ import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import type { Ticket } from '../../interfaces';
 
 interface TicketCardType {
-  ticket: Ticket
+  ticket: Ticket;
+  index: number;
 }
 
 function getDate(date: number): string {
   return new Date(date * 1000).toLocaleDateString();
 }
 
-export const TicketCard: FC<TicketCardType> = ({ ticket }) => {
+export const TicketCard: FC<TicketCardType> = ({ ticket, index }) => {
   const routeNavigator = useRouteNavigator();
 
   return (
     <ContentCard
-      onClick={() => { routeNavigator.push(`/preview/${ticket.id}`) }}
+      onClick={() => { routeNavigator.push(`/preview/${index}`) }}
       header={ticket.title}
       text={(<EllipsisText>{ ticket.description }</EllipsisText>)}
       subtitle={getDate(ticket.date)}

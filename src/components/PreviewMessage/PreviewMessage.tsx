@@ -18,7 +18,7 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
       <div className="message">
         {(ticket.media && ticket.media.length > 0) &&
           <div className="message__img">
-            <GridAvatar src={ticket.media.slice(0, 3).map(i => URL.createObjectURL(i))} />
+            <GridAvatar src={ticket.media.slice(0, 3)} />
           </div>
         }
 

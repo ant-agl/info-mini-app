@@ -40,8 +40,8 @@ export const Home: FC<NavIdProps> = ({ id }) => {
         <Group>
           <Header>Список тикетов</Header>
           <CardGrid size="m">
-            {tickets.map((ticket: Ticket) => (
-              <TicketCard key={ticket.id} ticket={ticket} />
+            {tickets.map((ticket: Ticket, i) => (
+              <TicketCard key={i} ticket={ticket} index={i} />
             ))}
           </CardGrid>
 

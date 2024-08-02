@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Ticket, TicketForm } from "../interfaces";
+import type { Ticket, TicketForm, TicketDecode } from "../interfaces";
 import { tickets } from "./mockData";
 import bencode from "bencode";
 import blake from "blakejs";
@@ -18,6 +18,17 @@ const api = axios.create({
   },
 });
 
+// function getUrl(img: ArrayBuffer): string {
+//   console.log(new TextDecoder().decode(img));
+//   return `data:image/png;base64,${new TextDecoder().decode(img)}`;
+
+//   const uint8Array = new Uint8Array(img);
+//   const blob = new Blob([img], { type: "image/webp" });
+//   console.log(blob);
+
+//   return URL.createObjectURL(blob);
+// }
+
 export function getTickets(): Promise<Ticket[]> {
   return new Promise((resolve, reject) => {
     if (dev) {
@@ -27,18 +38,18 @@ export function getTickets(): Promise<Ticket[]> {
 
     api.get("/wmc")
       .then(res => {
-        const decodeRes = bencode.decode( res.data, 'utf8' );
-        const data: Ticket[] = [];
-        decodeRes.forEach((item: TicketForm) => {
-          data.push({
-            title: item.title,
-            description: item.content,
-            tags: item.groups,
-            date: item.time,
-            media: null,
-          });
-        });
+        const decodeRes = bencode.decode( res.data );
+        console.log(decodeRes);
+
+        const data: Ticket[] = decodeRes.map((item: TicketDecode) => ({
+          title: new TextDecoder().decode(item.title),
+          description: new TextDecoder().decode(item.content),
+          tags: item.groups.map(g => new TextDecoder().decode(g)),
+          date: item.time,
+          media: item.media.map(i => new TextDecoder().decode(i)),
+        }));
         console.log(data);
+
         resolve(data);
       })
       .catch((err) => {
