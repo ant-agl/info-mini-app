@@ -19,14 +19,13 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
 
   useEffect(() => {
     if (params && params.id) {
-      // const existingTicket = tickets.find(t => t.id === +params.id!);
-      const existingTicket = tickets[+params.id!];
+      const existingTicket = tickets.find(t => t.id === params.id!);
       if (existingTicket) {
         setTicket(existingTicket);
       } else {
         getTickets().then((t) => {
           dispatch(setTickets(t));
-          const foundTicket = t.find(t => t.id === +params.id!);
+          const foundTicket = t.find(t => t.id === params.id!);
           if (foundTicket) {
             setTicket(foundTicket);
           } else {
@@ -46,7 +45,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
         { ticket?.title }
       </PanelHeader>
 
-      {ticket &&
+      {(ticket && params) &&
         <Div>
           <Group>
             <Header>Предпросмотр тикета</Header>
@@ -69,10 +68,10 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
             </FormItem>
             <Div>
               <ButtonGroup mode="horizontal" gap="m" stretched style={{ maxWidth: 450, margin: "0 auto" }}>
-                <Button onClick={() => {sendForRevision(ticket.id!, reason)}} size="l" appearance="negative" stretched>
+                <Button onClick={() => {sendForRevision(params.id!, reason)}} size="l" appearance="negative" stretched>
                   На доработку
                 </Button>
-                <Button onClick={() => {sendForPublication(ticket.id!)}} size="l" appearance="positive" stretched>
+                <Button onClick={() => {sendForPublication(params.id!)}} size="l" appearance="positive" stretched>
                   На публикацию
                 </Button>
               </ButtonGroup>

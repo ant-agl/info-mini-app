@@ -8,19 +8,18 @@ import type { Ticket } from '../../interfaces';
 
 interface TicketCardType {
   ticket: Ticket;
-  index: number;
 }
 
 function getDate(date: number): string {
   return new Date(date * 1000).toLocaleDateString();
 }
 
-export const TicketCard: FC<TicketCardType> = ({ ticket, index }) => {
+export const TicketCard: FC<TicketCardType> = ({ ticket }) => {
   const routeNavigator = useRouteNavigator();
 
   return (
     <ContentCard
-      onClick={() => { routeNavigator.push(`/preview/${index}`) }}
+      onClick={() => { routeNavigator.push(`/preview/${ticket.id}`) }}
       header={ticket.title}
       text={(<EllipsisText>{ ticket.description }</EllipsisText>)}
       subtitle={getDate(ticket.date)}

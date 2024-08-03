@@ -11,12 +11,10 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   ChipsInput,
   IconButton,
   Image,
-  // Subhead,
   Flex,
   Textarea,
  } from '@vkontakte/vkui';
 import { Icon24Camera, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline } from '@vkontakte/icons';
-// Icon24Document Icon16DeleteOutline
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket } from "../api/api";
 
@@ -26,7 +24,6 @@ export const New: FC<NavIdProps> = ({ id }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  // const [files, setFiles] = useState<File[]>([]);
   const [tags, setTags] = useState<{value: string, label: string}[]>([]);
   const [date, setDate] = useState<Date>(() => new Date());
   const [isSend, setIsSend] = useState(false);
@@ -60,15 +57,6 @@ export const New: FC<NavIdProps> = ({ id }) => {
   const deleteImage = (index: number) => {
     setImages(prevFiles => prevFiles.filter((_, i) => i !== index));
   }
-
-  // const handleFiles = (newFiles: FileList | null) => {
-  //   if (newFiles)
-  //     setFiles(prevFiles => [...prevFiles, ...Array.from(newFiles)]);
-  // }
-
-  // const deleteFile = (index: number) => {
-  //   setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
-  // }
 
   const readFiles = async (files: File[]): Promise<ArrayBuffer[]> => {
     const readFile = (file: File): Promise<ArrayBuffer> => new Promise((resolve, reject) => {
@@ -176,30 +164,6 @@ export const New: FC<NavIdProps> = ({ id }) => {
                 </Flex>
               }
             </FormItem>
-            {/* <FormItem
-              top="Загрузите документы (при необходимости)"
-            >
-              <File
-                before={
-                  <Icon24Document role="presentation" />
-                }
-                size="m" mode="secondary"
-                multiple
-                onChange={(e) => handleFiles(e.currentTarget?.files)}
-              />
-              {files.map((file, i) => (
-                <Flex key={i} align='center' gap={10}>
-                  <Subhead>{file.name}</Subhead>
-                  <IconButton
-                    label="Удалить файл"
-                    style={{ width: 30, height: 30 }}
-                    onClick={() => deleteFile(i)}
-                  >
-                    <Icon16DeleteOutline style={{ padding: 3, margin: "auto" }} />
-                  </IconButton>
-                </Flex>
-              ))}
-            </FormItem> */}
           </FormLayoutGroup>
           <FormLayoutGroup mode="horizontal">
             <FormItem top="Теги (введите и нажмите enter)">

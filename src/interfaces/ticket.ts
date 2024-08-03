@@ -1,5 +1,5 @@
 export default interface Ticket {
-  id?: number;
+  id?: string;
   title: string;
   description: string;
   media: string[];

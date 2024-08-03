@@ -1,4 +1,5 @@
 export default interface TicketDecode {
+  index: ArrayBuffer;
   title: ArrayBuffer;
   content: ArrayBuffer;
   groups: ArrayBuffer[];
