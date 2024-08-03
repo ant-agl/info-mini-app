@@ -72,7 +72,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
   const sendForm = async () => {
     setIsSend(true);
 
-    if (!title || !description) return;
+    if (!title || !description || tags.length == 0) return;
 
     const fileBuffers = await readFiles(images);
     const data = {
