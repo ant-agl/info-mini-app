@@ -38,6 +38,16 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
     }
   }, []);
 
+  function btnRevision(id: string, reason: string) {
+    sendForRevision(id, reason).then(() => {
+      routeNavigator.push("/");
+    });
+  }
+  function btnPublication(id: string) {
+    sendForPublication(id).then(() => {
+      routeNavigator.push("/");
+    });
+  }
 
   return (
     <Panel id={id}>
@@ -68,10 +78,10 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
             </FormItem>
             <Div>
               <ButtonGroup mode="horizontal" gap="m" stretched style={{ maxWidth: 450, margin: "0 auto" }}>
-                <Button onClick={() => {sendForRevision(params.id!, reason)}} size="l" appearance="negative" stretched>
+                <Button onClick={() => {btnRevision(params.id!, reason)}} size="l" appearance="negative" stretched>
                   На доработку
                 </Button>
-                <Button onClick={() => {sendForPublication(params.id!)}} size="l" appearance="positive" stretched>
+                <Button onClick={() => {btnPublication(params.id!)}} size="l" appearance="positive" stretched>
                   На публикацию
                 </Button>
               </ButtonGroup>

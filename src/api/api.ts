@@ -97,7 +97,7 @@ export function sendForPublication(id: string) {
       return;
     }
 
-    api.post("/approve/" + id)
+    api.get("/appr/" + id)
       .then(res => {
         resolve(res.data);
       })

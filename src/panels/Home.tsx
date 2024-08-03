@@ -26,11 +26,11 @@ export const Home: FC<NavIdProps> = ({ id }) => {
   const tickets = useSelector((state: RootState) => state.tickets.tickets);
 
   useEffect(() => {
-    if (tickets.length === 0) {
-      getTickets().then((t) => {
-        dispatch(setTickets(t))
-      });
-    }
+    // if (tickets.length === 0) {
+    getTickets().then((t) => {
+      dispatch(setTickets(t))
+    });
+    // }
   }, [dispatch, tickets.length]);
 
   return (
