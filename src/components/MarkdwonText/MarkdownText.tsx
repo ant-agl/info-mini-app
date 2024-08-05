@@ -1,64 +1,28 @@
 import { FC } from 'react';
-import { Text } from '@vkontakte/vkui';
-
-function escapeMarkdownV2(text: string): string {
-  // Экранирование специальных символов
-  const replacements: { [key: string]: string } = {
-    '\\*': '*',
-    '\\_': '_',
-    '\\`': '`',
-    '\\[': '[',
-    '\\]': ']',
-    '\\(': '(',
-    '\\)': ')',
-    '\\~': '~',
-    '\\>': '>',
-    '\\#': '#',
-    '\\+': '+',
-    '\\-': '-',
-    '\\=': '=',
-    '\\|': '|',
-    '\\{': '{',
-    '\\}': '}',
-    '\\.': '.',
-    '\\!': '!',
-    '\\\\': '\\'
-  };
-
-  for (const [key, value] of Object.entries(replacements)) {
-    const regex = new RegExp(key, 'g');
-    text = text.replace(regex, value);
-  }
-
-  return text;
-}
 
 function convertMarkdownV2ToHtml(markdown: string): string {
-  // Вначале обрабатываем экранирование
-  markdown = escapeMarkdownV2(markdown);
-
   // Обработка всех MarkdownV2 элементов с учетом вложенности
   function processFormatting(markdown: string): string {
     // Обработка жирного текста
-    markdown = markdown.replace(/(\*)([^*]*?)\1/g, '<b>$2</b>');
+    markdown = markdown.replace(/(?<!\\)(\*)([^*]*?)\1/g, '<b>$2</b>');
 
     // Обработка подчеркнутого текста
-    markdown = markdown.replace(/(__)(.*?)\1/g, '<u>$2</u>');
+    markdown = markdown.replace(/(?<!\\)(__)(.*?)\1/g, '<u>$2</u>');
 
     // Обработка курсивного текста
-    markdown = markdown.replace(/(_)([^_]*?)\1/g, '<i>$2</i>');
+    markdown = markdown.replace(/(?<!\\)(_)([^_]*?)\1/g, '<i>$2</i>');
 
     // Обработка зачеркнутого текста
-    markdown = markdown.replace(/(~)(.*?)\1/g, '<s>$2</s>');
+    markdown = markdown.replace(/(?<!\\)(~)(.*?)\1/g, '<s>$2</s>');
 
     // Обработка скрытого текста
-    markdown = markdown.replace(/(\|\|)(.*?)\1/g, '<span style="color: #efefef; background-color: #efefef; border-radius: 3px;">$2</span>');
+    markdown = markdown.replace(/(?<!\\)(\|\|)(.*?)\1/g, '<span style="color: #efefef; background-color: #efefef; border-radius: 3px;">$2</span>');
 
     // Обработка моноширинного текста
-    markdown = markdown.replace(/(`)(.*?)\1/g, '<code>$2</code>');
+    markdown = markdown.replace(/(?<!\\)(`)(.*?)\1/g, '<code>$2</code>');
 
     // Обработка цитат
-    markdown = markdown.replace(/^>(.*)$/gm, '<blockquote style="margin: 0;padding: 7px 15px;background: #0000001f;border-radius: 5px;">$1</blockquote>');
+    markdown = markdown.replace(/^(?<!\\)>(.*)$/gm, '<blockquote style="margin: 0;padding: 7px 15px;background: #0000001f;border-radius: 5px;">$1</blockquote>');
 
     // Обработка переноса строки
     markdown = markdown.replace(/(\n)/g, '<br />');

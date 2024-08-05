@@ -14,6 +14,12 @@ export const tickets: Ticket[] = [
         "index": "41de96a86dc1d20e276f58377d00243e_3v5hHjErp2i5zodkrfykPQ4soabTt.image",
         "mimetype": "image/png",
         "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNxpbbKOUEj02TP36T92IPkU-7qTYIYoIrEg&s",
+      },
+      {
+        "name": "output_formats.go",
+        "index": "31c0ecd805ce6eeb7c473dfbd768654f_23kS6Ru2jMnncBRJ1cLAJBrN.text",
+        "mimetype": "text/plain; charset=utf-8",
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNxpbbKOUEj02TP36T92IPkU-7qTYIYoIrEg&s",
       }
     ],
     "offer": true,

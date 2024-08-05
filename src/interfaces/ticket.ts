@@ -1,6 +1,6 @@
 interface Media {
   name: string;
-  url: string;
+  url?: string;
   index: string;
   mimetype: string;
 }
