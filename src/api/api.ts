@@ -4,7 +4,7 @@ import { tickets } from "./mockData";
 import bencode from "bencode";
 import blake from "blakejs";
 
-const dev = false;
+const dev = true;
 const login = "admin";
 // const login = "admin2";
 const password = "qwerty";
@@ -18,7 +18,7 @@ const api = axios.create({
   },
 });
 
-function getUrl(img: ArrayBuffer) {
+function getUrl(img: ArrayBuffer): string {
   return "https://so.ant-agl.ru/assets/" + new TextDecoder().decode(img);
 }
 
@@ -38,9 +38,16 @@ export function getTickets(): Promise<Ticket[]> {
           id: new TextDecoder().decode(item.index),
           title: new TextDecoder().decode(item.title),
           description: new TextDecoder().decode(item.content),
-          tags: item.groups.map(g => new TextDecoder().decode(g)),
-          date: item.time,
-          media: item.media.map(i => getUrl(i)),
+          groups: item.groups.map(g => new TextDecoder().decode(g)),
+          time: item.time,
+          media: item.media.map(m => ({
+            name: new TextDecoder().decode(m.name),
+            url: getUrl(m.index),
+            index: new TextDecoder().decode(m.index),
+            mimetype: new TextDecoder().decode(m.mimetype)
+          })),
+          offer: new TextDecoder().decode(item.offer),
+          authors: item.authors.map(g => new TextDecoder().decode(g)),
         }));
         console.log(data);
 
@@ -98,6 +105,42 @@ export function sendForPublication(id: string) {
     }
 
     api.get("/appr/" + id)
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
+export function getBindings(): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    if (dev) {
+      resolve(['123', '234', '312']);
+      return;
+    }
+
+    api.get("/bindings")
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
+export function saveBinding(proto: string, contact: string) {
+  return new Promise((resolve, reject) => {
+    if (dev) {
+      resolve(true);
+      return;
+    }
+
+    api.get(`/bind/${proto}/${contact}`)
       .then(res => {
         resolve(res.data);
       })

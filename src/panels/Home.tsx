@@ -4,10 +4,10 @@ import {
   PanelHeader,
   Group,
   CardGrid,
-  Div,
   Header,
-  CellButton,
-  Spacing,
+  Button,
+  Text,
+  Div,
   NavIdProps,
 } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
@@ -36,24 +36,49 @@ export const Home: FC<NavIdProps> = ({ id }) => {
   return (
     <Panel id={id}>
       <PanelHeader>Система информирования ДГТУ</PanelHeader>
-      <Div>
-        <Group>
-          <Header>Список тикетов</Header>
+      <Group>
+        <Button
+          mode="tertiary"
+          stretched={true}
+          align='left'
+          onClick={() => { routeNavigator.push('/new') }}
+          before={<Icon28AddOutline width={18} height={18} />}
+        >
+          Добавить новый тикет
+        </Button>
+      </Group>
+
+      <Group>
+        <Header>Список неподтвержденных тикетов</Header>
+        {tickets.filter(t => !t.offer).length > 0 &&
           <CardGrid size="m">
-            {tickets.map((ticket: Ticket) => (
+            {tickets.filter(t => !t.offer).map((ticket: Ticket) => (
               <TicketCard key={ticket.id} ticket={ticket} />
             ))}
           </CardGrid>
+        }
+        {tickets.filter(t => !t.offer).length == 0 &&
+          <Div>
+            <Text style={{textAlign: 'center', opacity: 0.5}}>Пусто</Text>
+          </Div>
+        }
+      </Group>
 
-          <Spacing size={16} />
-          <CellButton
-            onClick={() => { routeNavigator.push('/new') }}
-            before={<Icon28AddOutline />}
-          >
-            Добавить новый тикет
-          </CellButton>
-        </Group>
-      </Div>
+      <Group>
+        <Header>Список тикетов, ожидающих публикации</Header>
+        {tickets.filter(t => t.offer).length > 0 &&
+          <CardGrid size="m">
+            {tickets.filter(t => t.offer).map((ticket: Ticket) => (
+              <TicketCard key={ticket.id} ticket={ticket} />
+            ))}
+          </CardGrid>
+        }
+        {tickets.filter(t => t.offer).length == 0 &&
+          <Div>
+            <Text style={{textAlign: 'center', opacity: 0.5}}>Пусто</Text>
+          </Div>
+        }
+      </Group>
     </Panel>
   );
 };

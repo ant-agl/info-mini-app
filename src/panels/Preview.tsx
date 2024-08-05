@@ -56,38 +56,40 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
       </PanelHeader>
 
       {(ticket && params) &&
-        <Div>
-          <Group>
-            <Header>Предпросмотр тикета</Header>
+        <Group>
+          <Header>Предпросмотр тикета</Header>
 
-            {ticket &&
-              <PreviewMessage ticket={ticket} />
-            }
+          {ticket &&
+            <PreviewMessage ticket={ticket} />
+          }
 
-            <Spacing size={16} />
+          {!ticket.offer && (
+            <div>
+              <Spacing size={16} />
 
-            <FormItem top="Описание доработок" style={{ maxWidth: 450, margin: "0 auto" }}>
-              <Textarea
-                id="reason"
-                name="reason"
-                placeholder="Введите описание доработок"
-                value={reason}
-                required
-                onChange={(e) => setReason(e.currentTarget.value)}
-              />
-            </FormItem>
-            <Div>
-              <ButtonGroup mode="horizontal" gap="m" stretched style={{ maxWidth: 450, margin: "0 auto" }}>
-                <Button onClick={() => {btnRevision(params.id!, reason)}} size="l" appearance="negative" stretched>
-                  На доработку
-                </Button>
-                <Button onClick={() => {btnPublication(params.id!)}} size="l" appearance="positive" stretched>
-                  На публикацию
-                </Button>
-              </ButtonGroup>
-            </Div>
-          </Group>
-        </Div>
+              <FormItem top="Описание доработок" style={{ maxWidth: 450, margin: "0 auto" }}>
+                <Textarea
+                  id="reason"
+                  name="reason"
+                  placeholder="Введите описание доработок"
+                  value={reason}
+                  required
+                  onChange={(e) => setReason(e.currentTarget.value)}
+                />
+              </FormItem>
+              <Div>
+                <ButtonGroup mode="horizontal" gap="m" stretched style={{ maxWidth: 450, margin: "0 auto" }}>
+                  <Button onClick={() => {btnRevision(params.id!, reason)}} size="l" appearance="negative" stretched>
+                    На доработку
+                  </Button>
+                  <Button onClick={() => {btnPublication(params.id!)}} size="l" appearance="positive" stretched>
+                    На публикацию
+                  </Button>
+                </ButtonGroup>
+              </Div>
+            </div>
+          )}
+        </Group>
       }
     </Panel>
   );

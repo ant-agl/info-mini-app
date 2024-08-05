@@ -1,0 +1,14 @@
+.vkuiEllipsisText__content br {
+  display: none;
+}
+
+.vkuiEllipsisText__content blockquote {
+  display: inline;
+}
+
+.authors {
+  opacity: 0.5;
+  font-size: 0.9em;
+  margin-top: 3px;
+  display: inline-block;
+}
