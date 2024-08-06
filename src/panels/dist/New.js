@@ -138,7 +138,7 @@ exports.New = function (_a) {
                     images.map(function (file, i) { return (React.createElement(vkui_1.Flex, { key: i, align: 'center', gap: 10 },
                         React.createElement(vkui_1.Subhead, null, file.name),
                         React.createElement(vkui_1.IconButton, { label: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0444\u0430\u0439\u043B", style: { width: 30, height: 30 }, onClick: function () { return deleteImage(i); } },
-                            React.createElement(icons_1.Icon16DeleteOutline, { style: { padding: 3, margin: "auto" } })))); }))),
+                            React.createElement(icons_1.Icon16DeleteOutline, { style: { padding: 3, margin: "auto" }, color: 'red' })))); }))),
             React.createElement(vkui_1.FormLayoutGroup, { mode: "horizontal" },
                 React.createElement(vkui_1.FormItem, { top: "\u0422\u0435\u0433\u0438 (\u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u0438 \u043D\u0430\u0436\u043C\u0438\u0442\u0435 enter)" },
                     React.createElement(vkui_1.ChipsInput, { id: "groups", placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u0433\u0438", after: groups.length > 0 &&

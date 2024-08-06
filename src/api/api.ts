@@ -115,10 +115,10 @@ export function sendForPublication(id: string) {
   });
 }
 
-export function getBindings(): Promise<string[]> {
+export function getBindings(): Promise<string> {
   return new Promise((resolve, reject) => {
     if (dev) {
-      resolve(['123', '234', '312']);
+      resolve('123123123');
       return;
     }
 

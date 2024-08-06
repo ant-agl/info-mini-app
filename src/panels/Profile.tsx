@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import {
   Panel,
   PanelHeader,
@@ -7,36 +7,52 @@ import {
   NavIdProps,
   FormLayoutGroup,
   FormItem,
-  Button,
-  ChipsInput,
-  IconButton
+  Input,
+  IconButton,
+  Flex,
 } from '@vkontakte/vkui';
-import { Icon16Clear } from '@vkontakte/icons';
+import { Icon16Pen, Icon20Check, Icon28CrossLargeOutline } from '@vkontakte/icons';
 import { getBindings, saveBinding  } from '../api/api';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { RootState, AppDispatch } from '../store';
-// import { setTickets } from '../store';
 
 export const Profile: FC<NavIdProps> = ({ id }) => {
-  const [tgID, setTgID] = useState<{value: string, label: string}[]>([]);
-
-  // const dispatch = useDispatch<AppDispatch>();
-  // const tickets = useSelector((state: RootState) => state.tickets.tickets);
+  const [tgID, setTgID] = useState("");
+  const [oldTgID, setOldTgID] = useState("");
+  const [tgDisabled, setTgDisabled] = useState(true);
+  const tgInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    getBindings().then((ids: string[]) => {
-      const res: {value: string, label: string}[] = [];
-      ids.forEach(id => {
-        res.push({ value: id, label: id });
-      });
-
-      setTgID(res);
-      // dispatch(setTgID(res));
+    getBindings().then((id: string) => {
+      setTgID(id);
+      setOldTgID(id);
     });
   }, []);
 
-  const sendForm = () => {
-    saveBinding("tg", tgID.map(i => i.value).join(','));
+  const sendForm = (type: string) => {
+    console.log('save', type, tgID);
+    saveBinding(type, tgID);
+
+    if (type == 'tg') {
+      setTgDisabled(true);
+      setOldTgID(tgID);
+    }
+  }
+
+  const cancelField = (type: string) => {
+    if (type == 'tg') {
+      setTgDisabled(true);
+      setTgID(oldTgID);
+    }
+  }
+
+  const editField = (type: string) => {
+    if (type == 'tg') {
+      setTgDisabled(false);
+      setTimeout(() => {
+        if (tgInput.current) {
+          tgInput.current.focus();
+        }
+      });
+    }
   }
 
   return (
@@ -46,21 +62,36 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
         <Header>Настройки профиля</Header>
 
         <FormLayoutGroup>
-          <FormItem top="Telegram ID (введите и нажмите enter)" htmlFor="tg-id">
-            <ChipsInput
-              id="tg-id"
-              name="tg-id"
-              placeholder="xxx"
-              after={tgID.length > 0 &&
-                <IconButton hoverMode="opacity" label="Очистить поле" onClick={() => setTgID([])}>
-                  <Icon16Clear />
+          <FormItem top="Telegram ID" htmlFor="tg-id">
+            <Flex noWrap gap='m'>
+              <Input
+                getRef={tgInput}
+                id="tg-id"
+                name="tg-id"
+                placeholder="xxx"
+                value={tgID}
+                onChange={(e) => setTgID(e.currentTarget.value)}
+                style={{width: '100%'}}
+                disabled={tgDisabled}
+              />
+
+              {tgDisabled ?  (
+                <IconButton label="Редактировать" onClick={() => editField('tg')}>
+                  <Icon16Pen color='var(--vkui--color_text_accent_themed)' />
                 </IconButton>
-              }
-              value={tgID}
-              onChange={(e) => setTgID(e)}
-            />
+              ) : (
+                <Flex noWrap style={{margin: 0}}>
+                  <IconButton label="Сохранить" onClick={() => sendForm('tg') }>
+                    <Icon20Check width={16} height={16} color='green' />
+                  </IconButton>
+                  <IconButton label="Отмена" onClick={() => cancelField('tg') }>
+                    <Icon28CrossLargeOutline width={16} height={16} color='red' />
+                  </IconButton>
+                </Flex>
+              )}
+            </Flex>
           </FormItem>
-          <FormItem>
+          {/* <FormItem>
             <Button
               onClick={sendForm}
               size="m"
@@ -68,7 +99,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
             >
               Сохранить
             </Button>
-        </FormItem>
+          </FormItem> */}
         </FormLayoutGroup>
       </Group>
     </Panel>

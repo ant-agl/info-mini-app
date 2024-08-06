@@ -106,7 +106,7 @@ exports.sendForPublication = sendForPublication;
 function getBindings() {
     return new Promise(function (resolve, reject) {
         if (dev) {
-            resolve(['123', '234', '312']);
+            resolve('123123123');
             return;
         }
         api.get("/bindings")

@@ -140,7 +140,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
                     style={{ width: 30, height: 30 }}
                     onClick={() => deleteImage(i)}
                   >
-                    <Icon16DeleteOutline style={{ padding: 3, margin: "auto" }} />
+                    <Icon16DeleteOutline style={{ padding: 3, margin: "auto" }} color='red' />
                   </IconButton>
                 </Flex>
               ))}
