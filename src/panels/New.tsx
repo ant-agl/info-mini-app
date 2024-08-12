@@ -42,21 +42,21 @@ export const New: FC<NavIdProps> = ({ id }) => {
     setImages(prevFiles => prevFiles.filter((_, i) => i !== index));
   }
 
-  const readFiles = async (files: File[]): Promise<{ data: ArrayBuffer[], name: string }[]> => {
-    const readFile = (file: File): Promise<{ data: ArrayBuffer[], name: string }> => new Promise((resolve, reject) => {
+  const readFiles = async (files: File[]): Promise<{ data: ArrayBuffer, name: string }[]> => {
+    const readFile = (file: File): Promise<{ data: ArrayBuffer, name: string }> => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
         resolve({
           data: reader.result as ArrayBuffer,
           name: file.name,
         });
-      }
+      };
       reader.onerror = reject;
       reader.readAsArrayBuffer(file);
     });
 
     return Promise.all(files.map(readFile));
-  }
+  };
 
   const sendForm = async () => {
     setIsSend(true);

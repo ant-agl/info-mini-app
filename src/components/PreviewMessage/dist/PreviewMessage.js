@@ -27,7 +27,7 @@ exports.PreviewMessage = function (_a) {
         files.length > 0 &&
             React.createElement("div", { className: "message" },
                 React.createElement("div", { className: "message__content" },
-                    files.map(function (file) { return (React.createElement("div", { className: "file", key: file.indexН },
+                    files.map(function (file) { return (React.createElement("div", { className: "file", key: file.index },
                         React.createElement("div", { className: "file__icon" },
                             React.createElement(icons_1.Icon20DocumentOutline, null)),
                         React.createElement("div", { className: "file__content" },

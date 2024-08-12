@@ -22,7 +22,7 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
       <div className="message">
         {(images.length > 0) &&
           <div className="message__img">
-            <GridAvatar src={images.slice(0, 3).map(m => m.url)} />
+            <GridAvatar src={images.slice(0, 3).map(m => m.url!)} />
           </div>
         }
 
