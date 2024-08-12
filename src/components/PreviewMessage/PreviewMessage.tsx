@@ -43,7 +43,7 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
          <div className="message">
            <div className="message__content">
              {files.map(file => (
-              <div className="file">
+              <div className="file" key={file.index}>
                 <div className="file__icon">
                   <Icon20DocumentOutline />
                 </div>

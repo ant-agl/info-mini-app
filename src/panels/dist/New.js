@@ -76,7 +76,12 @@ exports.New = function (_a) {
         return __generator(this, function (_a) {
             readFile = function (file) { return new Promise(function (resolve, reject) {
                 var reader = new FileReader();
-                reader.onload = function () { return resolve(reader.result); };
+                reader.onload = function () {
+                    resolve({
+                        data: reader.result,
+                        name: file.name
+                    });
+                };
                 reader.onerror = reject;
                 reader.readAsArrayBuffer(file);
             }); };

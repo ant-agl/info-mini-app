@@ -47,7 +47,7 @@ export function getTickets(): Promise<Ticket[]> {
             index: new TextDecoder().decode(m.index),
             mimetype: new TextDecoder().decode(m.mimetype)
           })),
-          offer: new TextDecoder().decode(item.offer),
+          offer: item.offer,
           authors: item.authors.map(g => new TextDecoder().decode(g)),
         }));
         console.log(data);
@@ -56,7 +56,7 @@ export function getTickets(): Promise<Ticket[]> {
       })
       .catch((err) => {
         console.log(err);
-        if (err.response.status == 401) {
+        if (err?.response?.status == 401) {
           logout();
         }
         reject(err);

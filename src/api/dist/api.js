@@ -43,14 +43,15 @@ function getTickets() {
                     index: new TextDecoder().decode(m.index),
                     mimetype: new TextDecoder().decode(m.mimetype)
                 }); }),
-                offer: new TextDecoder().decode(item.offer),
+                offer: item.offer,
                 authors: item.authors.map(function (g) { return new TextDecoder().decode(g); })
             }); });
             console.log(data);
             resolve(data);
         })["catch"](function (err) {
+            var _a;
             console.log(err);
-            if (err.response.status == 401) {
+            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401) {
                 logout();
             }
             reject(err);
