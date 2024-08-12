@@ -15,28 +15,30 @@ import {
 } from '@vkontakte/vkui';
 import { Icon16Pen, Icon20Check, Icon28CrossLargeOutline } from '@vkontakte/icons';
 import { getBindings, saveBinding  } from '../api/api';
+import { Bindings } from '../interfaces';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export const Profile: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
 
-  const [tgID, setTgID] = useState("");
-  const [oldTgID, setOldTgID] = useState("");
+  const [tgID, setTgID] = useState<number | "">("");
+  const [oldTgID, setOldTgID] = useState<number | "">("");
   const [tgDisabled, setTgDisabled] = useState(true);
   const tgInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    getBindings().then((id: string) => {
-      setTgID(id);
-      setOldTgID(id);
+    getBindings().then((bindings: Bindings) => {
+      if (bindings.tg) {
+        setTgID(bindings.tg);
+        setOldTgID(bindings.tg);
+      }
     });
   }, []);
 
   const sendForm = (type: string) => {
     console.log('save', type, tgID);
-    saveBinding(type, tgID);
-
-    if (type == 'tg') {
+    if (type == 'tg' && tgID) {
+      saveBinding(type, tgID);
       setTgDisabled(true);
       setOldTgID(tgID);
     }

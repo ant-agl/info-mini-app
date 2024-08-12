@@ -13,7 +13,6 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   Textarea,
   Subhead,
  } from '@vkontakte/vkui';
-// import { Icon24Camera, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline } from '@vkontakte/icons';
 import { Icon20SendOutline, Icon16Clear, Icon24Document, Icon16DeleteOutline } from '@vkontakte/icons';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket } from "../api/api";
@@ -158,7 +157,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
           </FormItem>
         </FormLayoutGroup>
         <FormLayoutGroup mode="horizontal">
-          <FormItem top="Теги (введите и нажмите enter)">
+          <FormItem top="Теги (введите и нажмите enter)" required>
             <ChipsInput
               id="groups"
               placeholder="Введите теги"
@@ -171,7 +170,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
               onChange={(e) => setGroups(e)}
             />
           </FormItem>
-          <FormItem top="Выставите дату и время публикации">
+          <FormItem top="Выставите дату и время публикации" required>
             <DateInput
               disablePast enableTime closeOnChange
               value={date}

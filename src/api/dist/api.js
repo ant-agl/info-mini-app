@@ -110,12 +110,13 @@ exports.sendForPublication = sendForPublication;
 function getBindings() {
     return new Promise(function (resolve, reject) {
         if (dev) {
-            resolve('123123123');
+            resolve({ tg: 12321123 });
             return;
         }
         api.get("/bindings")
             .then(function (res) {
-            resolve(res.data);
+            var decodeRes = bencode_1["default"].decode(res.data);
+            resolve(decodeRes);
         })["catch"](function (err) {
             console.log(err);
             reject(err);

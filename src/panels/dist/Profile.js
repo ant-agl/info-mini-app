@@ -14,15 +14,17 @@ exports.Profile = function (_a) {
     var _d = react_1.useState(true), tgDisabled = _d[0], setTgDisabled = _d[1];
     var tgInput = react_1.useRef(null);
     react_1.useEffect(function () {
-        api_1.getBindings().then(function (id) {
-            setTgID(id);
-            setOldTgID(id);
+        api_1.getBindings().then(function (bindings) {
+            if (bindings.tg) {
+                setTgID(bindings.tg);
+                setOldTgID(bindings.tg);
+            }
         });
     }, []);
     var sendForm = function (type) {
         console.log('save', type, tgID);
-        api_1.saveBinding(type, tgID);
-        if (type == 'tg') {
+        if (type == 'tg' && tgID) {
+            api_1.saveBinding(type, tgID);
             setTgDisabled(true);
             setOldTgID(tgID);
         }

@@ -46,7 +46,6 @@ exports.__esModule = true;
 exports.New = void 0;
 var react_1 = require("react");
 var vkui_1 = require("@vkontakte/vkui");
-// import { Icon24Camera, Icon20SendOutline, Icon16Clear, Icon20DeleteOutline } from '@vkontakte/icons';
 var icons_1 = require("@vkontakte/icons");
 var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
 var api_1 = require("../api/api");
@@ -140,11 +139,11 @@ exports.New = function (_a) {
                         React.createElement(vkui_1.IconButton, { label: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0444\u0430\u0439\u043B", style: { width: 30, height: 30 }, onClick: function () { return deleteImage(i); } },
                             React.createElement(icons_1.Icon16DeleteOutline, { style: { padding: 3, margin: "auto" }, color: 'red' })))); }))),
             React.createElement(vkui_1.FormLayoutGroup, { mode: "horizontal" },
-                React.createElement(vkui_1.FormItem, { top: "\u0422\u0435\u0433\u0438 (\u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u0438 \u043D\u0430\u0436\u043C\u0438\u0442\u0435 enter)" },
+                React.createElement(vkui_1.FormItem, { top: "\u0422\u0435\u0433\u0438 (\u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u0438 \u043D\u0430\u0436\u043C\u0438\u0442\u0435 enter)", required: true },
                     React.createElement(vkui_1.ChipsInput, { id: "groups", placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u0433\u0438", after: groups.length > 0 &&
                             React.createElement(vkui_1.IconButton, { hoverMode: "opacity", label: "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043F\u043E\u043B\u0435", onClick: function () { return setGroups([]); } },
                                 React.createElement(icons_1.Icon16Clear, null)), value: groups, onChange: function (e) { return setGroups(e); } })),
-                React.createElement(vkui_1.FormItem, { top: "\u0412\u044B\u0441\u0442\u0430\u0432\u0438\u0442\u0435 \u0434\u0430\u0442\u0443 \u0438 \u0432\u0440\u0435\u043C\u044F \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438" },
+                React.createElement(vkui_1.FormItem, { top: "\u0412\u044B\u0441\u0442\u0430\u0432\u0438\u0442\u0435 \u0434\u0430\u0442\u0443 \u0438 \u0432\u0440\u0435\u043C\u044F \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438", required: true },
                     React.createElement(vkui_1.DateInput, { disablePast: true, enableTime: true, closeOnChange: true, value: date, onChange: function (e) { return e && setDate(e); } }))),
             React.createElement(vkui_1.FormItem, null,
                 React.createElement(vkui_1.Button, { onClick: sendForm, before: React.createElement(icons_1.Icon20SendOutline, null), size: "m", stretched: true }, "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 / \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044E")))));

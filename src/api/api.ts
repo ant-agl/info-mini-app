@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Ticket, TicketForm, TicketDecode } from "../interfaces";
+import type { Ticket, TicketForm, TicketDecode, Bindings } from "../interfaces";
 import { tickets } from "./mockData";
 import bencode from "bencode";
 
@@ -119,16 +119,17 @@ export function sendForPublication(id: string) {
   });
 }
 
-export function getBindings(): Promise<string> {
+export function getBindings(): Promise<Bindings> {
   return new Promise((resolve, reject) => {
     if (dev) {
-      resolve('123123123');
+      resolve({ tg: 12321123 });
       return;
     }
 
     api.get("/bindings")
       .then(res => {
-        resolve(res.data);
+        const decodeRes = bencode.decode( res.data );
+        resolve(decodeRes);
       })
       .catch((err) => {
         console.log(err);
@@ -137,7 +138,7 @@ export function getBindings(): Promise<string> {
   });
 }
 
-export function saveBinding(proto: string, contact: string) {
+export function saveBinding(proto: string, contact: number) {
   return new Promise((resolve, reject) => {
     if (dev) {
       resolve(true);
