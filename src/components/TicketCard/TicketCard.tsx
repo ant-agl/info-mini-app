@@ -26,6 +26,7 @@ export const TicketCard: FC<TicketCardType> = ({ ticket }) => {
       text={(
         <span>
           <EllipsisText><MarkdownText text={ticket.description} /></EllipsisText>
+          <br />
           <span className="authors">{ ticket.authors.join(', ') }</span>
         </span>
       )}

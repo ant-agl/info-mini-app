@@ -1,15 +1,16 @@
 "use strict";
+var _a;
 exports.__esModule = true;
 exports.saveBinding = exports.getBindings = exports.sendForPublication = exports.sendForRevision = exports.addTicket = exports.getTickets = void 0;
 var axios_1 = require("axios");
 var mockData_1 = require("./mockData");
 var bencode_1 = require("bencode");
-var blakejs_1 = require("blakejs");
-var dev = true;
-var login = "admin";
-// const login = "admin2";
-var password = "qwerty";
-var token = btoa(login + ":" + blakejs_1["default"].blake2bHex(password, undefined, 64));
+var dev = false;
+var token = (_a = localStorage.getItem('authToken')) !== null && _a !== void 0 ? _a : "";
+var logout = function () {
+    localStorage.setItem("authToken", "");
+    location.reload();
+};
 var api = axios_1["default"].create({
     baseURL: "https://donstu.ant-agl.ru/" + token,
     headers: {
@@ -49,6 +50,9 @@ function getTickets() {
             resolve(data);
         })["catch"](function (err) {
             console.log(err);
+            if (err.response.status == 401) {
+                logout();
+            }
             reject(err);
         });
     });

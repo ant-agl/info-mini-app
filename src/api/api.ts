@@ -2,13 +2,14 @@ import axios from "axios";
 import type { Ticket, TicketForm, TicketDecode } from "../interfaces";
 import { tickets } from "./mockData";
 import bencode from "bencode";
-import blake from "blakejs";
 
-const dev = true;
-const login = "admin";
-// const login = "admin2";
-const password = "qwerty";
-const token = btoa(`${login}:${blake.blake2bHex(password, undefined, 64)}`);
+const dev = false;
+const token = localStorage.getItem('authToken') ?? "";
+
+const logout = () => {
+  localStorage.setItem("authToken", "");
+  location.reload();
+}
 
 const api = axios.create({
   baseURL: "https://donstu.ant-agl.ru/" + token,
@@ -55,6 +56,9 @@ export function getTickets(): Promise<Ticket[]> {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.status == 401) {
+          logout();
+        }
         reject(err);
       });
   });

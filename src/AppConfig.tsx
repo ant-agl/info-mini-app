@@ -10,12 +10,19 @@ import store from './store';
 import { transformVKBridgeAdaptivity } from './utils';
 import { router } from './routes';
 import { App } from './App';
+import { Login } from './Login';
+import { useEffect, useState } from 'react';
 
 export const AppConfig = () => {
   const vkBridgeAppearance = useAppearance() || undefined;
   const vkBridgeInsets = useInsets() || undefined;
   const adaptivity = transformVKBridgeAdaptivity(useAdaptivity());
   const { vk_platform } = parseURLSearchParamsForGetLaunchParams(window.location.search);
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    setIsAuth(!!localStorage.getItem("authToken"));
+  }, []);
 
   return (
     <ConfigProvider
@@ -28,7 +35,11 @@ export const AppConfig = () => {
         <Provider store={store}>
           <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
             <RouterProvider router={router}>
-              <App />
+              {isAuth ?
+                <App />
+                :
+                <Login />
+              }
             </RouterProvider>
           </AppRoot>
         </Provider>

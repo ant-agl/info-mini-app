@@ -14,5 +14,6 @@ exports.TicketCard = function (_a) {
     return (React.createElement(vkui_1.ContentCard, { onClick: function () { routeNavigator.push("/preview/" + ticket.id); }, header: ticket.title, text: (React.createElement("span", null,
             React.createElement(vkui_1.EllipsisText, null,
                 React.createElement(MarkdownText_1.MarkdownText, { text: ticket.description })),
+            React.createElement("br", null),
             React.createElement("span", { className: "authors" }, ticket.authors.join(', ')))), subtitle: getDate(ticket.time), caption: ticket.groups.join(', '), hasHover: true }));
 };

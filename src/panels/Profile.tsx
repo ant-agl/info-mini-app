@@ -10,11 +10,16 @@ import {
   Input,
   IconButton,
   Flex,
+  Button,
+  Div,
 } from '@vkontakte/vkui';
 import { Icon16Pen, Icon20Check, Icon28CrossLargeOutline } from '@vkontakte/icons';
 import { getBindings, saveBinding  } from '../api/api';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export const Profile: FC<NavIdProps> = ({ id }) => {
+  const routeNavigator = useRouteNavigator();
+
   const [tgID, setTgID] = useState("");
   const [oldTgID, setOldTgID] = useState("");
   const [tgDisabled, setTgDisabled] = useState(true);
@@ -53,6 +58,12 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
         }
       });
     }
+  }
+
+  const logout = () => {
+    localStorage.setItem("authToken", "");
+    routeNavigator.push('/');
+    location.reload();
   }
 
   return (
@@ -101,6 +112,17 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
             </Button>
           </FormItem> */}
         </FormLayoutGroup>
+
+        <Div>
+          <Button
+            onClick={logout}
+            size="m"
+            stretched
+            appearance="negative"
+          >
+            Выйти
+          </Button>
+        </Div>
       </Group>
     </Panel>
   );

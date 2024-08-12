@@ -15,3 +15,5 @@ var New_1 = require("./New");
 __createBinding(exports, New_1, "New");
 var Profile_1 = require("./Profile");
 __createBinding(exports, Profile_1, "Profile");
+var Login_1 = require("./Login");
+__createBinding(exports, Login_1, "Login");
