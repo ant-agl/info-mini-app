@@ -18,9 +18,11 @@ import { TicketCard } from '../components/TicketCard/TicketCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { setTickets } from '../store';
+import { useSnackbar } from '../SnackbarContext';
 
 export const Home: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
+  const { openError } = useSnackbar();
 
   const dispatch = useDispatch<AppDispatch>();
   const tickets = useSelector((state: RootState) => state.tickets.tickets);
@@ -29,6 +31,9 @@ export const Home: FC<NavIdProps> = ({ id }) => {
     // if (tickets.length === 0) {
     getTickets().then((t) => {
       dispatch(setTickets(t))
+    })
+    .catch((err) => {
+      openError(err.response.data || "Возникла ошибка")
     });
     // }
   }, [dispatch, tickets.length]);

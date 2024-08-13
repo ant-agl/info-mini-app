@@ -12,6 +12,7 @@ import { router } from './routes';
 import { App } from './App';
 import { Login } from './Login';
 import { useEffect, useState } from 'react';
+import { SnackbarProvider } from './SnackbarContext';
 
 export const AppConfig = () => {
   const vkBridgeAppearance = useAppearance() || undefined;
@@ -35,11 +36,13 @@ export const AppConfig = () => {
         <Provider store={store}>
           <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
             <RouterProvider router={router}>
-              {isAuth ?
-                <App />
-                :
-                <Login />
-              }
+              <SnackbarProvider>
+                {isAuth ?
+                  <App />
+                  :
+                  <Login />
+                }
+              </SnackbarProvider>
             </RouterProvider>
           </AppRoot>
         </Provider>

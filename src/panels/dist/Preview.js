@@ -9,9 +9,11 @@ var PreviewMessage_1 = require("../components/PreviewMessage/PreviewMessage");
 var api_2 = require("../api/api");
 var react_redux_1 = require("react-redux");
 var store_1 = require("../store");
+var SnackbarContext_1 = require("../SnackbarContext");
 exports.Preview = function (_a) {
     var id = _a.id;
     var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
+    var openError = SnackbarContext_1.useSnackbar().openError;
     var params = vk_mini_apps_router_1.useParams();
     var dispatch = react_redux_1.useDispatch();
     var tickets = react_redux_1.useSelector(function (state) { return state.tickets.tickets; });
@@ -35,6 +37,7 @@ exports.Preview = function (_a) {
                     }
                 })["catch"](function () {
                     routeNavigator.push("/");
+                    openError(err.response.data || "Возникла ошибка");
                 });
             }
         }
@@ -42,11 +45,15 @@ exports.Preview = function (_a) {
     function btnRevision(id, reason) {
         api_2.sendForRevision(id, reason).then(function () {
             routeNavigator.push("/");
+        })["catch"](function (err) {
+            openError(err.response.data || "Возникла ошибка");
         });
     }
     function btnPublication(id) {
         api_2.sendForPublication(id).then(function () {
             routeNavigator.push("/");
+        })["catch"](function (err) {
+            openError(err.response.data || "Возникла ошибка");
         });
     }
     return (React.createElement(vkui_1.Panel, { id: id },

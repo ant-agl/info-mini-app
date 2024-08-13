@@ -78,6 +78,9 @@ export function addTicket(data: TicketForm): Promise<void> {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.data)
+          localStorage.setItem('errorMessage', err.response.data);
+          // alert(err.response.data)
         reject(err);
       });
   });

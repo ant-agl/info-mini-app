@@ -71,6 +71,9 @@ function addTicket(data) {
             resolve();
         })["catch"](function (err) {
             console.log(err);
+            if (err.response.data)
+                localStorage.setItem('errorMessage', err.response.data);
+            // alert(err.response.data)
             reject(err);
         });
     });

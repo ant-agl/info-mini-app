@@ -16,9 +16,11 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
 import { Icon20SendOutline, Icon16Clear, Icon24Document, Icon16DeleteOutline } from '@vkontakte/icons';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket } from "../api/api";
+import { useSnackbar } from '../SnackbarContext';
 
 export const New: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
+  const { openError } = useSnackbar();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -75,6 +77,9 @@ export const New: FC<NavIdProps> = ({ id }) => {
 
     addTicket(data).then(() => {
       routeNavigator.push('/');
+    })
+    .catch((err) => {
+      openError(err.response.data || "Возникла ошибка")
     });
   }
 

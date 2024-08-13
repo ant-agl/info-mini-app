@@ -9,15 +9,19 @@ var api_1 = require("../api/api");
 var TicketCard_1 = require("../components/TicketCard/TicketCard");
 var react_redux_1 = require("react-redux");
 var store_1 = require("../store");
+var SnackbarContext_1 = require("../SnackbarContext");
 exports.Home = function (_a) {
     var id = _a.id;
     var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
+    var openError = SnackbarContext_1.useSnackbar().openError;
     var dispatch = react_redux_1.useDispatch();
     var tickets = react_redux_1.useSelector(function (state) { return state.tickets.tickets; });
     react_1.useEffect(function () {
         // if (tickets.length === 0) {
         api_1.getTickets().then(function (t) {
             dispatch(store_1.setTickets(t));
+        })["catch"](function (err) {
+            openError(err.response.data || "Возникла ошибка");
         });
         // }
     }, [dispatch, tickets.length]);

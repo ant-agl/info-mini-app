@@ -6,9 +6,11 @@ var vkui_1 = require("@vkontakte/vkui");
 var icons_1 = require("@vkontakte/icons");
 var api_1 = require("../api/api");
 var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
+var SnackbarContext_1 = require("../SnackbarContext");
 exports.Profile = function (_a) {
     var id = _a.id;
     var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
+    var openError = SnackbarContext_1.useSnackbar().openError;
     var _b = react_1.useState(""), tgID = _b[0], setTgID = _b[1];
     var _c = react_1.useState(""), oldTgID = _c[0], setOldTgID = _c[1];
     var _d = react_1.useState(true), tgDisabled = _d[0], setTgDisabled = _d[1];
@@ -19,12 +21,16 @@ exports.Profile = function (_a) {
                 setTgID(bindings.tg);
                 setOldTgID(bindings.tg);
             }
+        })["catch"](function (err) {
+            openError(err.response.data || "Возникла ошибка");
         });
     }, []);
     var sendForm = function (type) {
         console.log('save', type, tgID);
         if (type == 'tg' && tgID) {
-            api_1.saveBinding(type, tgID);
+            api_1.saveBinding(type, tgID)["catch"](function (err) {
+                openError(err.response.data || "Возникла ошибка");
+            });
             setTgDisabled(true);
             setOldTgID(tgID);
         }

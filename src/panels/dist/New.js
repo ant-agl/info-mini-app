@@ -49,9 +49,11 @@ var vkui_1 = require("@vkontakte/vkui");
 var icons_1 = require("@vkontakte/icons");
 var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
 var api_1 = require("../api/api");
+var SnackbarContext_1 = require("../SnackbarContext");
 exports.New = function (_a) {
     var id = _a.id;
     var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
+    var openError = SnackbarContext_1.useSnackbar().openError;
     var _b = react_1.useState(""), title = _b[0], setTitle = _b[1];
     var _c = react_1.useState(""), description = _c[0], setDescription = _c[1];
     var _d = react_1.useState([]), images = _d[0], setImages = _d[1];
@@ -109,6 +111,8 @@ exports.New = function (_a) {
                     console.log(data);
                     api_1.addTicket(data).then(function () {
                         routeNavigator.push('/');
+                    })["catch"](function (err) {
+                        openError(err.response.data || "Возникла ошибка");
                     });
                     return [2 /*return*/];
             }

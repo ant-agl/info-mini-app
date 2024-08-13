@@ -17,9 +17,11 @@ import { Icon16Pen, Icon20Check, Icon28CrossLargeOutline } from '@vkontakte/icon
 import { getBindings, saveBinding  } from '../api/api';
 import { Bindings } from '../interfaces';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { useSnackbar } from '../SnackbarContext';
 
 export const Profile: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
+  const { openError } = useSnackbar();
 
   const [tgID, setTgID] = useState<number | "">("");
   const [oldTgID, setOldTgID] = useState<number | "">("");
@@ -32,13 +34,19 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
         setTgID(bindings.tg);
         setOldTgID(bindings.tg);
       }
+    })
+    .catch((err) => {
+      openError(err.response.data || "Возникла ошибка")
     });
   }, []);
 
   const sendForm = (type: string) => {
     console.log('save', type, tgID);
     if (type == 'tg' && tgID) {
-      saveBinding(type, tgID);
+      saveBinding(type, tgID)
+      .catch((err) => {
+        openError(err.response.data || "Возникла ошибка")
+      });
       setTgDisabled(true);
       setOldTgID(tgID);
     }

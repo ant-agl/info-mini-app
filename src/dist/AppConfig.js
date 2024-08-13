@@ -24,6 +24,7 @@ var routes_1 = require("./routes");
 var App_1 = require("./App");
 var Login_1 = require("./Login");
 var react_1 = require("react");
+var SnackbarContext_1 = require("./SnackbarContext");
 exports.AppConfig = function () {
     var vkBridgeAppearance = vk_bridge_react_1.useAppearance() || undefined;
     var vkBridgeInsets = vk_bridge_react_1.useInsets() || undefined;
@@ -37,8 +38,9 @@ exports.AppConfig = function () {
         React.createElement(vkui_1.AdaptivityProvider, __assign({}, adaptivity),
             React.createElement(react_redux_1.Provider, { store: store_1["default"] },
                 React.createElement(vkui_1.AppRoot, { mode: "full", safeAreaInsets: vkBridgeInsets },
-                    React.createElement(vk_mini_apps_router_1.RouterProvider, { router: routes_1.router }, isAuth ?
-                        React.createElement(App_1.App, null)
-                        :
-                            React.createElement(Login_1.Login, null)))))));
+                    React.createElement(vk_mini_apps_router_1.RouterProvider, { router: routes_1.router },
+                        React.createElement(SnackbarContext_1.SnackbarProvider, null, isAuth ?
+                            React.createElement(App_1.App, null)
+                            :
+                                React.createElement(Login_1.Login, null))))))));
 };

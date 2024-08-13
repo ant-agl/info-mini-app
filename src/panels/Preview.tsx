@@ -8,9 +8,12 @@ import { sendForRevision, sendForPublication } from "../api/api";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { setTickets } from '../store';
+import { useSnackbar } from '../SnackbarContext';
 
 export const Preview: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
+  const { openError } = useSnackbar();
+
   const params = useParams<'id'>();
   const dispatch = useDispatch<AppDispatch>();
   const tickets = useSelector((state: RootState) => state.tickets.tickets);
@@ -33,6 +36,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
           }
         }).catch(() => {
           routeNavigator.push("/");
+          openError(err.response.data || "Возникла ошибка")
         });
       }
     }
@@ -41,11 +45,17 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
   function btnRevision(id: string, reason: string) {
     sendForRevision(id, reason).then(() => {
       routeNavigator.push("/");
+    })
+    .catch((err) => {
+      openError(err.response.data || "Возникла ошибка")
     });
   }
   function btnPublication(id: string) {
     sendForPublication(id).then(() => {
       routeNavigator.push("/");
+    })
+    .catch((err) => {
+      openError(err.response.data || "Возникла ошибка")
     });
   }
 
