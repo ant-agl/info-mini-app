@@ -24,7 +24,7 @@ export const routes = RoutesConfig.create([
       createPanel(DEFAULT_VIEW_PANELS.HOME, '/', []),
       createPanel(DEFAULT_VIEW_PANELS.LOGIN, `/${DEFAULT_VIEW_PANELS.LOGIN}`, []),
       createPanel(DEFAULT_VIEW_PANELS.PREVIEW, `/${DEFAULT_VIEW_PANELS.PREVIEW}/:id`, []),
-      createPanel(DEFAULT_VIEW_PANELS.NEW, `/${DEFAULT_VIEW_PANELS.NEW}`, []),
+      createPanel(DEFAULT_VIEW_PANELS.NEW, `/${DEFAULT_VIEW_PANELS.NEW}/:id?`, []),
       createPanel(DEFAULT_VIEW_PANELS.PROFILE, `/${DEFAULT_VIEW_PANELS.PROFILE}`, []),
     ]),
   ]),

@@ -3,7 +3,7 @@ import type { Ticket, TicketForm, TicketDecode, Bindings } from "../interfaces";
 import { tickets } from "./mockData";
 import bencode from "bencode";
 
-const dev = false;
+const dev = true;
 const token = localStorage.getItem('authToken') ?? "";
 
 const logout = () => {
@@ -80,7 +80,29 @@ export function addTicket(data: TicketForm): Promise<void> {
         console.log(err);
         if (err.response.data)
           localStorage.setItem('errorMessage', err.response.data);
-          // alert(err.response.data)
+
+        reject(err);
+      });
+  });
+}
+
+export function editTicket(index: string, data: TicketForm): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (dev) {
+      resolve();
+      return;
+    }
+
+    api.patch("/edit/" + index, bencode.encode(data))
+      .then(res => {
+        console.log('res.data', res.data);
+        resolve();
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data)
+          localStorage.setItem('errorMessage', err.response.data);
+
         reject(err);
       });
   });
@@ -149,6 +171,31 @@ export function saveBinding(proto: string, contact: number) {
     }
 
     api.get(`/bind/${proto}/${contact}`)
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+}
+
+export function getGroups(): Promise<string[][]> {
+  return new Promise((resolve, reject) => {
+    if (dev) {
+      resolve([
+        [
+          'group1', 'group2', 'all'
+        ],
+        [
+          'group3'
+        ]
+      ]);
+      return;
+    }
+
+    api.get(`/groups`)
       .then(res => {
         resolve(res.data);
       })

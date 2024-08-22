@@ -1,11 +1,11 @@
 "use strict";
 var _a;
 exports.__esModule = true;
-exports.saveBinding = exports.getBindings = exports.sendForPublication = exports.sendForRevision = exports.addTicket = exports.getTickets = void 0;
+exports.getGroups = exports.saveBinding = exports.getBindings = exports.sendForPublication = exports.sendForRevision = exports.editTicket = exports.addTicket = exports.getTickets = void 0;
 var axios_1 = require("axios");
 var mockData_1 = require("./mockData");
 var bencode_1 = require("bencode");
-var dev = false;
+var dev = true;
 var token = (_a = localStorage.getItem('authToken')) !== null && _a !== void 0 ? _a : "";
 var logout = function () {
     localStorage.setItem("authToken", "");
@@ -73,12 +73,30 @@ function addTicket(data) {
             console.log(err);
             if (err.response.data)
                 localStorage.setItem('errorMessage', err.response.data);
-            // alert(err.response.data)
             reject(err);
         });
     });
 }
 exports.addTicket = addTicket;
+function editTicket(index, data) {
+    return new Promise(function (resolve, reject) {
+        if (dev) {
+            resolve();
+            return;
+        }
+        api.patch("/edit/" + index, bencode_1["default"].encode(data))
+            .then(function (res) {
+            console.log('res.data', res.data);
+            resolve();
+        })["catch"](function (err) {
+            console.log(err);
+            if (err.response.data)
+                localStorage.setItem('errorMessage', err.response.data);
+            reject(err);
+        });
+    });
+}
+exports.editTicket = editTicket;
 function sendForRevision(id, reason) {
     return new Promise(function (resolve, reject) {
         if (dev) {
@@ -144,3 +162,26 @@ function saveBinding(proto, contact) {
     });
 }
 exports.saveBinding = saveBinding;
+function getGroups() {
+    return new Promise(function (resolve, reject) {
+        if (dev) {
+            resolve([
+                [
+                    'group1', 'group2', 'all'
+                ],
+                [
+                    'group3'
+                ]
+            ]);
+            return;
+        }
+        api.get("/groups")
+            .then(function (res) {
+            resolve(res.data);
+        })["catch"](function (err) {
+            console.log(err);
+            reject(err);
+        });
+    });
+}
+exports.getGroups = getGroups;

@@ -26,12 +26,13 @@ export const tickets: Ticket[] = [
     "id": "2024_08_05-13_13_41_667209f7aaab1fb25d33223ada0c1b2a",
     "authors": [
       "writer"
-    ]
+    ],
+    "corrections": [],
   },
   {
     "title": "testing",
     "groups": [
-      "all"
+      "all", "group3"
     ],
     "time": 1722871320,
     "description": "admins content\n\nwith some *attri__butes__*\n",
@@ -47,6 +48,18 @@ export const tickets: Ticket[] = [
     "id": "2024_08_05-13_13_23_66e6d6c7bd8692fc685717d052eede8a",
     "authors": [
       "admin"
-    ]
+    ],
+    "corrections": [
+      {
+        author: "admin",
+        text: "Test corrections",
+        sat: false
+      },
+      {
+        author: "admin",
+        text: "Test corrections 2",
+        sat: false
+      }
+    ],
   }
 ];

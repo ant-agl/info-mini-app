@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -50,16 +61,82 @@ var icons_1 = require("@vkontakte/icons");
 var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
 var api_1 = require("../api/api");
 var SnackbarContext_1 = require("../SnackbarContext");
+var react_redux_1 = require("react-redux");
+var store_1 = require("../store");
 exports.New = function (_a) {
+    var _b, _c;
     var id = _a.id;
     var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
     var openError = SnackbarContext_1.useSnackbar().openError;
-    var _b = react_1.useState(""), title = _b[0], setTitle = _b[1];
-    var _c = react_1.useState(""), description = _c[0], setDescription = _c[1];
-    var _d = react_1.useState([]), images = _d[0], setImages = _d[1];
-    var _e = react_1.useState([]), groups = _e[0], setGroups = _e[1];
-    var _f = react_1.useState(function () { return new Date(); }), date = _f[0], setDate = _f[1];
-    var _g = react_1.useState(false), isSend = _g[0], setIsSend = _g[1];
+    var params = vk_mini_apps_router_1.useParams();
+    var dispatch = react_redux_1.useDispatch();
+    var tickets = react_redux_1.useSelector(function (state) { return state.tickets.tickets; });
+    var _d = react_1.useState(), ticket = _d[0], setTicket = _d[1];
+    react_1.useEffect(function () {
+        if (params && params.id) {
+            var existingTicket = tickets.find(function (t) { return t.id === params.id; });
+            if (existingTicket) {
+                setTicket(existingTicket);
+            }
+            else {
+                api_1.getTickets().then(function (t) {
+                    dispatch(store_1.setTickets(t));
+                    var foundTicket = t.find(function (t) { return t.id === params.id; });
+                    if (foundTicket) {
+                        setTicket(foundTicket);
+                    }
+                    else {
+                        routeNavigator.push("/");
+                    }
+                })["catch"](function (err) {
+                    routeNavigator.push("/");
+                    openError(err.response.data || "Возникла ошибка");
+                });
+            }
+        }
+    }, []);
+    var _e = react_1.useState(""), title = _e[0], setTitle = _e[1];
+    var _f = react_1.useState(""), description = _f[0], setDescription = _f[1];
+    var _g = react_1.useState([]), images = _g[0], setImages = _g[1];
+    var _h = react_1.useState(function () { return new Date(); }), date = _h[0], setDate = _h[1];
+    var _j = react_1.useState(false), isSend = _j[0], setIsSend = _j[1];
+    var _k = react_1.useState([]), groups = _k[0], setGroups = _k[1];
+    var _l = react_1.useState([]), groupsVal = _l[0], setGroupsVal = _l[1];
+    var _m = react_1.useState([]), groupsList = _m[0], setGroupsList = _m[1];
+    var _o = react_1.useState(true), isDisabled = _o[0], setIsDisabled = _o[1];
+    react_1.useEffect(function () {
+        api_1.getGroups().then(function (g) {
+            setGroupsList(g);
+            setGroups(g.map(function (item) { return item.map(function (i) { return ({ value: false, label: i }); }); }));
+        });
+    }, []);
+    react_1.useEffect(function () {
+        if (groups[0] && groups[1])
+            setGroupsVal(__spreadArrays(groups[0].filter(function (g) { return g.value; }).map(function (g) { return g.label; }), groups[1].filter(function (g) { return g.value; }).map(function (g) { return g.label; })));
+    }, [groups]);
+    react_1.useEffect(function () {
+        setTitle((ticket === null || ticket === void 0 ? void 0 : ticket.title) || "");
+        setDescription((ticket === null || ticket === void 0 ? void 0 : ticket.description) || "");
+        setDate((ticket === null || ticket === void 0 ? void 0 : ticket.time) ? new Date(ticket.time * 1000) : new Date());
+        if (groupsList.length > 0) {
+            ticket === null || ticket === void 0 ? void 0 : ticket.groups.map(function (g) {
+                var i = groupsList[0].findIndex(function (gl) { return gl == g; });
+                if (i !== -1)
+                    updateGroups(0, i, true);
+                var j = groupsList[1].findIndex(function (gl) { return gl == g; });
+                if (j !== -1)
+                    updateGroups(1, j, true);
+            });
+        }
+    }, [ticket, groupsList]);
+    react_1.useEffect(function () {
+        setIsDisabled(!title || !description || groupsVal.length == 0);
+    }, [title, description, groupsVal]);
+    var updateGroups = function (i, j, val) {
+        var res = __assign({}, groups);
+        res[i][j].value = val;
+        setGroups(res);
+    };
     var isStatus = function (val) {
         if (!isSend)
             return "default";
@@ -96,7 +173,7 @@ exports.New = function (_a) {
             switch (_a.label) {
                 case 0:
                     setIsSend(true);
-                    if (!title || !description || groups.length == 0)
+                    if (isDisabled)
                         return [2 /*return*/];
                     return [4 /*yield*/, readFiles(images)];
                 case 1:
@@ -104,16 +181,27 @@ exports.New = function (_a) {
                     data = {
                         title: title,
                         content: description,
-                        groups: groups.map(function (t) { return t.value; }),
+                        groups: groupsVal,
                         time: Math.floor(date.getTime() / 1000),
                         media: fileBuffers
                     };
                     console.log(data);
-                    api_1.addTicket(data).then(function () {
-                        routeNavigator.push('/');
-                    })["catch"](function (err) {
-                        openError(err.response.data || "Возникла ошибка");
-                    });
+                    if (!(params === null || params === void 0 ? void 0 : params.id)) {
+                        // новый
+                        api_1.addTicket(data).then(function () {
+                            routeNavigator.push('/');
+                        })["catch"](function (err) {
+                            openError(err.response.data || "Возникла ошибка");
+                        });
+                    }
+                    else {
+                        // обновление
+                        api_1.editTicket(params.id, data).then(function () {
+                            routeNavigator.push('/');
+                        })["catch"](function (err) {
+                            openError(err.response.data || "Возникла ошибка");
+                        });
+                    }
                     return [2 /*return*/];
             }
         });
@@ -148,12 +236,11 @@ exports.New = function (_a) {
                         React.createElement(vkui_1.IconButton, { label: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0444\u0430\u0439\u043B", style: { width: 30, height: 30 }, onClick: function () { return deleteImage(i); } },
                             React.createElement(icons_1.Icon16DeleteOutline, { style: { padding: 3, margin: "auto" }, color: 'red' })))); }))),
             React.createElement(vkui_1.FormLayoutGroup, { mode: "horizontal" },
-                React.createElement(vkui_1.FormItem, { top: "\u0422\u0435\u0433\u0438 (\u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u0438 \u043D\u0430\u0436\u043C\u0438\u0442\u0435 enter)", required: true },
-                    React.createElement(vkui_1.ChipsInput, { id: "groups", placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u0433\u0438", after: groups.length > 0 &&
-                            React.createElement(vkui_1.IconButton, { hoverMode: "opacity", label: "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043F\u043E\u043B\u0435", onClick: function () { return setGroups([]); } },
-                                React.createElement(icons_1.Icon16Clear, null)), value: groups, onChange: function (e) { return setGroups(e); } })),
+                React.createElement(vkui_1.FormItem, { top: "\u0413\u0440\u0443\u043F\u043F\u044B", required: true }, (_b = groupsList[0]) === null || _b === void 0 ? void 0 :
+                    _b.map(function (group, i) { return (React.createElement(vkui_1.Checkbox, { checked: groups[0][i].value, key: i, onChange: function (e) { return updateGroups(0, i, e.target.checked); } }, group)); }), (_c = groupsList[1]) === null || _c === void 0 ? void 0 :
+                    _c.map(function (group, i) { return (React.createElement(vkui_1.Checkbox, { checked: groups[1][i].value, description: '\u041D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443', key: i, onChange: function (e) { return updateGroups(1, i, e.target.checked); } }, group)); })),
                 React.createElement(vkui_1.FormItem, { top: "\u0412\u044B\u0441\u0442\u0430\u0432\u0438\u0442\u0435 \u0434\u0430\u0442\u0443 \u0438 \u0432\u0440\u0435\u043C\u044F \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438", required: true },
                     React.createElement(vkui_1.DateInput, { disablePast: true, enableTime: true, closeOnChange: true, value: date, onChange: function (e) { return e && setDate(e); } }))),
             React.createElement(vkui_1.FormItem, null,
-                React.createElement(vkui_1.Button, { onClick: sendForm, before: React.createElement(icons_1.Icon20SendOutline, null), size: "m", stretched: true }, "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 / \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044E")))));
+                React.createElement(vkui_1.Button, { onClick: sendForm, before: React.createElement(icons_1.Icon20SendOutline, null), size: "m", stretched: true, disabled: isDisabled }, "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 / \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044E")))));
 };

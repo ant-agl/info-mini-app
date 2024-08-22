@@ -34,7 +34,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
           } else {
             routeNavigator.push("/");
           }
-        }).catch(() => {
+        }).catch((err) => {
           routeNavigator.push("/");
           openError(err.response.data || "Возникла ошибка")
         });
@@ -73,9 +73,19 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
             <PreviewMessage ticket={ticket} />
           }
 
+          <Spacing size={32} />
+
           {!ticket.offer && (
             <div>
-              <Spacing size={16} />
+              <Group style={{ maxWidth: 450, margin: "0 auto" }}>
+                <Header>Список корректировок</Header>
+
+                <Div>
+                  {ticket.corrections.map((corr, i) => (
+                    <p key={i}>{corr.text} ({corr.author})</p>
+                  ))}
+                </Div>
+              </Group>
 
               <FormItem top="Описание доработок" style={{ maxWidth: 450, margin: "0 auto" }}>
                 <Textarea
@@ -99,6 +109,11 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
               </Div>
             </div>
           )}
+          <ButtonGroup mode="horizontal" gap="m" stretched style={{ maxWidth: 450, margin: "0 auto 12px" }}>
+            <Button onClick={() => {routeNavigator.push("/new/" + params.id!)}} size="l" stretched>
+              Изменить
+            </Button>
+          </ButtonGroup>
         </Group>
       }
     </Panel>

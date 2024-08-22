@@ -17,7 +17,7 @@ exports.routes = vk_mini_apps_router_1.RoutesConfig.create([
             vk_mini_apps_router_1.createPanel(exports.DEFAULT_VIEW_PANELS.HOME, '/', []),
             vk_mini_apps_router_1.createPanel(exports.DEFAULT_VIEW_PANELS.LOGIN, "/" + exports.DEFAULT_VIEW_PANELS.LOGIN, []),
             vk_mini_apps_router_1.createPanel(exports.DEFAULT_VIEW_PANELS.PREVIEW, "/" + exports.DEFAULT_VIEW_PANELS.PREVIEW + "/:id", []),
-            vk_mini_apps_router_1.createPanel(exports.DEFAULT_VIEW_PANELS.NEW, "/" + exports.DEFAULT_VIEW_PANELS.NEW, []),
+            vk_mini_apps_router_1.createPanel(exports.DEFAULT_VIEW_PANELS.NEW, "/" + exports.DEFAULT_VIEW_PANELS.NEW + "/:id?", []),
             vk_mini_apps_router_1.createPanel(exports.DEFAULT_VIEW_PANELS.PROFILE, "/" + exports.DEFAULT_VIEW_PANELS.PROFILE, []),
         ]),
     ]),

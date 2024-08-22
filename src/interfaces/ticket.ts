@@ -5,6 +5,12 @@ interface Media {
   mimetype: string;
 }
 
+interface Correction {
+  author: string;
+  text: string;
+  sat: boolean;
+}
+
 export default interface Ticket {
   id?: string;
   title: string;
@@ -14,4 +20,5 @@ export default interface Ticket {
   time: number;
   offer: boolean;
   authors: string[];
+  corrections: Correction[];
 }

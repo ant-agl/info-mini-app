@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   Group,
   FormItem,
@@ -7,27 +7,98 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   DateInput,
   Button,
   FormLayoutGroup,
-  ChipsInput,
+  Checkbox,
   IconButton,
   Flex,
   Textarea,
   Subhead,
  } from '@vkontakte/vkui';
-import { Icon20SendOutline, Icon16Clear, Icon24Document, Icon16DeleteOutline } from '@vkontakte/icons';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { addTicket } from "../api/api";
+import { Icon20SendOutline, Icon24Document, Icon16DeleteOutline } from '@vkontakte/icons';
+import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { addTicket, editTicket, getGroups, getTickets } from "../api/api";
 import { useSnackbar } from '../SnackbarContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { Ticket } from '../interfaces';
+import { AppDispatch, RootState, setTickets } from '../store';
 
 export const New: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
   const { openError } = useSnackbar();
 
+  const params = useParams<'id'>();
+  const dispatch = useDispatch<AppDispatch>();
+  const tickets = useSelector((state: RootState) => state.tickets.tickets);
+  const [ticket, setTicket] = useState<Ticket>();
+
+  useEffect(() => {
+    if (params && params.id) {
+      const existingTicket = tickets.find(t => t.id === params.id!);
+      if (existingTicket) {
+        setTicket(existingTicket);
+      } else {
+        getTickets().then((t) => {
+          dispatch(setTickets(t));
+          const foundTicket = t.find(t => t.id === params.id);
+          if (foundTicket) {
+            setTicket(foundTicket);
+          } else {
+            routeNavigator.push("/");
+          }
+        }).catch((err) => {
+          routeNavigator.push("/");
+          openError(err.response.data || "Возникла ошибка")
+        });
+      }
+    }
+  }, []);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const [groups, setGroups] = useState<{value: string, label: string}[]>([]);
   const [date, setDate] = useState<Date>(() => new Date());
   const [isSend, setIsSend] = useState(false);
+  const [groups, setGroups] = useState<{value: boolean, label: string}[][]>([]);
+  const [groupsVal, setGroupsVal] = useState<string[]>([]);
+  const [groupsList, setGroupsList] = useState<string[][]>([]);
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    getGroups().then((g) => {
+      setGroupsList(g);
+      setGroups(g.map(item => item.map(i => ({value: false, label: i}))));
+    });
+  }, []);
+
+  useEffect(() => {
+    if (groups[0] && groups[1])
+      setGroupsVal([...groups[0].filter(g => g.value).map(g => g.label), ...groups[1].filter(g => g.value).map(g => g.label)]);
+  }, [groups]);
+
+  useEffect(() => {
+    setTitle(ticket?.title || "");
+    setDescription(ticket?.description || "");
+    setDate(ticket?.time ? new Date(ticket.time * 1000) : new Date());
+
+    if (groupsList.length > 0) {
+      ticket?.groups.map(g => {
+        const i = groupsList[0].findIndex(gl => gl == g);
+        if (i !== -1) updateGroups(0, i, true);
+
+        const j = groupsList[1].findIndex(gl => gl == g);
+        if (j !== -1) updateGroups(1, j, true);
+      });
+    }
+  }, [ticket, groupsList]);
+
+  useEffect(() => {
+    setIsDisabled(!title || !description || groupsVal.length == 0);
+  }, [title, description, groupsVal]);
+
+  const updateGroups = (i: number, j: number, val: boolean) => {
+    const res = {...groups};
+    res[i][j].value = val;
+    setGroups(res);
+  }
 
   const isStatus = (val: string): "default" | "valid" | "error" => {
     if (!isSend) return "default";
@@ -63,24 +134,36 @@ export const New: FC<NavIdProps> = ({ id }) => {
   const sendForm = async () => {
     setIsSend(true);
 
-    if (!title || !description || groups.length == 0) return;
+    if (isDisabled) return;
 
     const fileBuffers = await readFiles(images);
     const data = {
       title,
       content: description,
-      groups: groups.map(t => t.value),
+      groups: groupsVal,
       time: Math.floor(date.getTime() / 1000),
       media: fileBuffers,
     };
     console.log(data);
 
-    addTicket(data).then(() => {
-      routeNavigator.push('/');
-    })
-    .catch((err) => {
-      openError(err.response.data || "Возникла ошибка")
-    });
+
+    if (!params?.id) {
+      // новый
+      addTicket(data).then(() => {
+        routeNavigator.push('/');
+      })
+      .catch((err) => {
+        openError(err.response.data || "Возникла ошибка")
+      });
+    } else {
+      // обновление
+      editTicket(params.id, data).then(() => {
+        routeNavigator.push('/');
+      })
+      .catch((err) => {
+        openError(err.response.data || "Возникла ошибка")
+      });
+    }
   }
 
   return (
@@ -167,18 +250,16 @@ export const New: FC<NavIdProps> = ({ id }) => {
           </FormItem>
         </FormLayoutGroup>
         <FormLayoutGroup mode="horizontal">
-          <FormItem top="Теги (введите и нажмите enter)" required>
-            <ChipsInput
-              id="groups"
-              placeholder="Введите теги"
-              after={groups.length > 0 &&
-                <IconButton hoverMode="opacity" label="Очистить поле" onClick={() => setGroups([])}>
-                  <Icon16Clear />
-                </IconButton>
-              }
-              value={groups}
-              onChange={(e) => setGroups(e)}
-            />
+           <FormItem
+            top="Группы"
+            required
+          >
+            {groupsList[0]?.map((group, i) => (
+              <Checkbox checked={groups[0][i].value} key={i} onChange={(e) => updateGroups(0, i, e.target.checked)}>{ group }</Checkbox>
+            ))}
+            {groupsList[1]?.map((group, i) => (
+              <Checkbox checked={groups[1][i].value} description='На проверку' key={i} onChange={(e) => updateGroups(1, i, e.target.checked)}>{ group }</Checkbox>
+            ))}
           </FormItem>
           <FormItem top="Выставите дату и время публикации" required>
             <DateInput
@@ -195,6 +276,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
             before={<Icon20SendOutline />}
             size="m"
             stretched
+            disabled={isDisabled}
           >
             Отправить на проверку / публикацию
           </Button>
