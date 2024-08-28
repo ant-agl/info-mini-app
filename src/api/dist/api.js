@@ -1,25 +1,26 @@
 "use strict";
 var _a;
 exports.__esModule = true;
-exports.getGroups = exports.saveBinding = exports.getBindings = exports.sendForPublication = exports.sendForRevision = exports.editTicket = exports.addTicket = exports.getTickets = void 0;
+exports.getGroups = exports.saveBinding = exports.getBindings = exports.sendForPublication = exports.sendForRevision = exports.editTicket = exports.addTicket = exports.getTickets = exports.api = void 0;
 var axios_1 = require("axios");
 var mockData_1 = require("./mockData");
 var bencode_1 = require("bencode");
-var dev = true;
-var token = (_a = localStorage.getItem('authToken')) !== null && _a !== void 0 ? _a : "";
+var dev = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+var token = (_a = localStorage.token) !== null && _a !== void 0 ? _a : null;
 var logout = function () {
-    localStorage.setItem("authToken", "");
+    localStorage.setItem("token", "");
     location.reload();
 };
-var api = axios_1["default"].create({
-    baseURL: "https://donstu.ant-agl.ru/" + token,
+exports.api = axios_1["default"].create({
+    baseURL: "https://quueydeperfoy.beget.app/api/",
     headers: {
         "Content-Type": "application/x-bittorrent",
-        Accept: "text/plain, */*"
+        Accept: "text/plain, */*",
+        Authorization: token !== null && token !== void 0 ? token : ""
     }
 });
 function getUrl(img) {
-    return "https://so.ant-agl.ru/assets/" + new TextDecoder().decode(img);
+    return "https://quueydeperfoy.beget.app/assets/" + new TextDecoder().decode(img);
 }
 function getTickets() {
     return new Promise(function (resolve, reject) {
@@ -27,7 +28,7 @@ function getTickets() {
             resolve(mockData_1.tickets);
             return;
         }
-        api.get("/wmc")
+        exports.api.get("/wmc")
             .then(function (res) {
             var decodeRes = bencode_1["default"].decode(res.data);
             console.log(decodeRes);
@@ -51,7 +52,7 @@ function getTickets() {
         })["catch"](function (err) {
             var _a;
             console.log(err);
-            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401) {
+            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401 && localStorage.token) {
                 logout();
             }
             reject(err);
@@ -65,7 +66,7 @@ function addTicket(data) {
             resolve();
             return;
         }
-        api.post("/new", bencode_1["default"].encode(data))
+        exports.api.post("/new", bencode_1["default"].encode(data))
             .then(function (res) {
             console.log('res.data', res.data);
             resolve();
@@ -84,7 +85,7 @@ function editTicket(index, data) {
             resolve();
             return;
         }
-        api.patch("/edit/" + index, bencode_1["default"].encode(data))
+        exports.api.patch("/edit/" + index, bencode_1["default"].encode(data))
             .then(function (res) {
             console.log('res.data', res.data);
             resolve();
@@ -103,7 +104,7 @@ function sendForRevision(id, reason) {
             resolve(true);
             return;
         }
-        api.post("/reject/" + id, bencode_1["default"].encode(reason))
+        exports.api.post("/reject/" + id, bencode_1["default"].encode(reason))
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {
@@ -119,7 +120,7 @@ function sendForPublication(id) {
             resolve(true);
             return;
         }
-        api.get("/appr/" + id)
+        exports.api.get("/appr/" + id)
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {
@@ -135,7 +136,7 @@ function getBindings() {
             resolve({ tg: 12321123 });
             return;
         }
-        api.get("/bindings")
+        exports.api.get("/bindings")
             .then(function (res) {
             var decodeRes = bencode_1["default"].decode(res.data);
             resolve(decodeRes);
@@ -152,7 +153,7 @@ function saveBinding(proto, contact) {
             resolve(true);
             return;
         }
-        api.get("/bind/" + proto + "/" + contact)
+        exports.api.get("/bind/" + proto + "/" + contact)
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {
@@ -175,7 +176,7 @@ function getGroups() {
             ]);
             return;
         }
-        api.get("/groups")
+        exports.api.get("/groups")
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {

@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -64,14 +53,13 @@ var SnackbarContext_1 = require("../SnackbarContext");
 var react_redux_1 = require("react-redux");
 var store_1 = require("../store");
 exports.New = function (_a) {
-    var _b, _c;
     var id = _a.id;
     var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
     var openError = SnackbarContext_1.useSnackbar().openError;
     var params = vk_mini_apps_router_1.useParams();
     var dispatch = react_redux_1.useDispatch();
     var tickets = react_redux_1.useSelector(function (state) { return state.tickets.tickets; });
-    var _d = react_1.useState(), ticket = _d[0], setTicket = _d[1];
+    var _b = react_1.useState(), ticket = _b[0], setTicket = _b[1];
     react_1.useEffect(function () {
         if (params && params.id) {
             var existingTicket = tickets.find(function (t) { return t.id === params.id; });
@@ -95,48 +83,45 @@ exports.New = function (_a) {
             }
         }
     }, []);
-    var _e = react_1.useState(""), title = _e[0], setTitle = _e[1];
-    var _f = react_1.useState(""), description = _f[0], setDescription = _f[1];
-    var _g = react_1.useState([]), images = _g[0], setImages = _g[1];
-    var _h = react_1.useState(function () { return new Date(); }), date = _h[0], setDate = _h[1];
-    var _j = react_1.useState(false), isSend = _j[0], setIsSend = _j[1];
-    var _k = react_1.useState([]), groups = _k[0], setGroups = _k[1];
-    var _l = react_1.useState([]), groupsVal = _l[0], setGroupsVal = _l[1];
-    var _m = react_1.useState([]), groupsList = _m[0], setGroupsList = _m[1];
-    var _o = react_1.useState(true), isDisabled = _o[0], setIsDisabled = _o[1];
+    var _c = react_1.useState([]), groupsList = _c[0], setGroupsList = _c[1];
     react_1.useEffect(function () {
-        api_1.getGroups().then(function (g) {
-            setGroupsList(g);
-            setGroups(g.map(function (item) { return item.map(function (i) { return ({ value: false, label: i }); }); }));
+        api_1.getGroups().then(function (res) {
+            setGroupsList(res);
         });
     }, []);
+    var _d = react_1.useState([]), groupsOption = _d[0], setGroupsOptions = _d[1];
     react_1.useEffect(function () {
-        if (groups[0] && groups[1])
-            setGroupsVal(__spreadArrays(groups[0].filter(function (g) { return g.value; }).map(function (g) { return g.label; }), groups[1].filter(function (g) { return g.value; }).map(function (g) { return g.label; })));
-    }, [groups]);
+        if (groupsList.length < 2)
+            return;
+        setGroupsOptions(__spreadArrays(groupsList[0].map(function (g) { return ({ value: g, label: g }); }), groupsList[1].map(function (g) { return ({ value: g, label: g }); })));
+    }, [groupsList]);
+    var _e = react_1.useState([]), selectedGroups = _e[0], setSelectedGroups = _e[1];
+    var _f = react_1.useState(""), title = _f[0], setTitle = _f[1];
+    var _g = react_1.useState(""), description = _g[0], setDescription = _g[1];
+    var _h = react_1.useState([]), images = _h[0], setImages = _h[1];
+    var _j = react_1.useState(function () { return new Date(); }), date = _j[0], setDate = _j[1];
+    var _k = react_1.useState(false), isSend = _k[0], setIsSend = _k[1];
+    var _l = react_1.useState(true), isDisabled = _l[0], setIsDisabled = _l[1];
     react_1.useEffect(function () {
-        setTitle((ticket === null || ticket === void 0 ? void 0 : ticket.title) || "");
-        setDescription((ticket === null || ticket === void 0 ? void 0 : ticket.description) || "");
-        setDate((ticket === null || ticket === void 0 ? void 0 : ticket.time) ? new Date(ticket.time * 1000) : new Date());
-        if (groupsList.length > 0) {
-            ticket === null || ticket === void 0 ? void 0 : ticket.groups.map(function (g) {
-                var i = groupsList[0].findIndex(function (gl) { return gl == g; });
-                if (i !== -1)
-                    updateGroups(0, i, true);
-                var j = groupsList[1].findIndex(function (gl) { return gl == g; });
-                if (j !== -1)
-                    updateGroups(1, j, true);
+        if (!ticket)
+            return;
+        setTitle(ticket.title || "");
+        setDescription(ticket.description || "");
+        setDate(ticket.time ? new Date(ticket.time * 1000) : new Date());
+        setImages(ticket.media || []);
+        if (groupsOption.length > 0 && ticket.groups.length > 0) {
+            var res_1 = [];
+            groupsOption.forEach(function (g) {
+                if (ticket.groups.includes(g.value)) {
+                    res_1.push(g);
+                }
             });
+            setSelectedGroups(res_1);
         }
-    }, [ticket, groupsList]);
+    }, [ticket, groupsOption]);
     react_1.useEffect(function () {
-        setIsDisabled(!title || !description || groupsVal.length == 0);
-    }, [title, description, groupsVal]);
-    var updateGroups = function (i, j, val) {
-        var res = __assign({}, groups);
-        res[i][j].value = val;
-        setGroups(res);
-    };
+        setIsDisabled(!title || !description);
+    }, [title, description]);
     var isStatus = function (val) {
         if (!isSend)
             return "default";
@@ -144,27 +129,34 @@ exports.New = function (_a) {
     };
     var handleImages = function (newFiles) {
         // const types = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
-        if (newFiles)
-            setImages(function (prevFiles) { return __spreadArrays(prevFiles, Array.from(newFiles)); });
+        if (newFiles) {
+            var t_1 = Array.from(newFiles).map(function (f) { return ({ data: f, name: f.name }); });
+            setImages(function (prevFiles) { return __spreadArrays(prevFiles, t_1); });
+        }
     };
     var deleteImage = function (index) {
         setImages(function (prevFiles) { return prevFiles.filter(function (_, i) { return i !== index; }); });
     };
-    var readFiles = function (files) { return __awaiter(void 0, void 0, Promise, function () {
+    var readFiles = function (media) { return __awaiter(void 0, void 0, Promise, function () {
         var readFile;
         return __generator(this, function (_a) {
-            readFile = function (file) { return new Promise(function (resolve, reject) {
-                var reader = new FileReader();
-                reader.onload = function () {
-                    resolve({
-                        data: reader.result,
-                        name: file.name
-                    });
-                };
-                reader.onerror = reject;
-                reader.readAsArrayBuffer(file);
+            readFile = function (media) { return new Promise(function (resolve, reject) {
+                if (!media.index) {
+                    var reader_1 = new FileReader();
+                    reader_1.onload = function () {
+                        resolve({
+                            data: reader_1.result,
+                            name: media.name
+                        });
+                    };
+                    reader_1.onerror = reject;
+                    reader_1.readAsArrayBuffer(media.data);
+                }
+                else {
+                    resolve(media);
+                }
             }); };
-            return [2 /*return*/, Promise.all(files.map(readFile))];
+            return [2 /*return*/, Promise.all(media.map(readFile))];
         });
     }); };
     var sendForm = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -181,7 +173,7 @@ exports.New = function (_a) {
                     data = {
                         title: title,
                         content: description,
-                        groups: groupsVal,
+                        groups: selectedGroups.map(function (g) { return g.value; }),
                         time: Math.floor(date.getTime() / 1000),
                         media: fileBuffers
                     };
@@ -236,9 +228,8 @@ exports.New = function (_a) {
                         React.createElement(vkui_1.IconButton, { label: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0444\u0430\u0439\u043B", style: { width: 30, height: 30 }, onClick: function () { return deleteImage(i); } },
                             React.createElement(icons_1.Icon16DeleteOutline, { style: { padding: 3, margin: "auto" }, color: 'red' })))); }))),
             React.createElement(vkui_1.FormLayoutGroup, { mode: "horizontal" },
-                React.createElement(vkui_1.FormItem, { top: "\u0413\u0440\u0443\u043F\u043F\u044B", required: true }, (_b = groupsList[0]) === null || _b === void 0 ? void 0 :
-                    _b.map(function (group, i) { return (React.createElement(vkui_1.Checkbox, { checked: groups[0][i].value, key: i, onChange: function (e) { return updateGroups(0, i, e.target.checked); } }, group)); }), (_c = groupsList[1]) === null || _c === void 0 ? void 0 :
-                    _c.map(function (group, i) { return (React.createElement(vkui_1.Checkbox, { checked: groups[1][i].value, description: '\u041D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443', key: i, onChange: function (e) { return updateGroups(1, i, e.target.checked); } }, group)); })),
+                React.createElement(vkui_1.FormItem, { top: "\u0413\u0440\u0443\u043F\u043F\u044B", required: true },
+                    React.createElement(vkui_1.ChipsSelect, { placeholder: "\u041D\u0435 \u0432\u044B\u0431\u0440\u0430\u043D\u044B", options: groupsOption, value: selectedGroups, onChange: setSelectedGroups, closeAfterSelect: false })),
                 React.createElement(vkui_1.FormItem, { top: "\u0412\u044B\u0441\u0442\u0430\u0432\u0438\u0442\u0435 \u0434\u0430\u0442\u0443 \u0438 \u0432\u0440\u0435\u043C\u044F \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438", required: true },
                     React.createElement(vkui_1.DateInput, { disablePast: true, enableTime: true, closeOnChange: true, value: date, onChange: function (e) { return e && setDate(e); } }))),
             React.createElement(vkui_1.FormItem, null,

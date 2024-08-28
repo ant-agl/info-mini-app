@@ -3,24 +3,25 @@ import type { Ticket, TicketForm, TicketDecode, Bindings } from "../interfaces";
 import { tickets } from "./mockData";
 import bencode from "bencode";
 
-const dev = true;
-const token = localStorage.getItem('authToken') ?? "";
+const dev = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
+const token = localStorage.token ?? null;
 
 const logout = () => {
-  localStorage.setItem("authToken", "");
+  localStorage.setItem("token", "");
   location.reload();
 }
 
-const api = axios.create({
-  baseURL: "https://donstu.ant-agl.ru/" + token,
+export const api = axios.create({
+  baseURL: "https://quueydeperfoy.beget.app/api/",
   headers: {
     "Content-Type": "application/x-bittorrent",
     Accept: "text/plain, */*",
+    Authorization: token ?? "",
   },
 });
 
 function getUrl(img: ArrayBuffer): string {
-  return "https://so.ant-agl.ru/assets/" + new TextDecoder().decode(img);
+  return "https://quueydeperfoy.beget.app/assets/" + new TextDecoder().decode(img);
 }
 
 export function getTickets(): Promise<Ticket[]> {
@@ -56,7 +57,7 @@ export function getTickets(): Promise<Ticket[]> {
       })
       .catch((err) => {
         console.log(err);
-        if (err?.response?.status == 401) {
+        if (err?.response?.status == 401 && localStorage.token) {
           logout();
         }
         reject(err);

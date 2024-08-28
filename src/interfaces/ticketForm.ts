@@ -1,5 +1,6 @@
-interface Media {
-  data: ArrayBuffer,
+export interface Media {
+  data?: ArrayBuffer | File,
+  index?: string,
   name: string,
 }
 

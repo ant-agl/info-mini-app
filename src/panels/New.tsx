@@ -7,7 +7,7 @@ import { NavIdProps, Panel, PanelHeader, PanelHeaderBack,
   DateInput,
   Button,
   FormLayoutGroup,
-  Checkbox,
+  ChipsSelect,
   IconButton,
   Flex,
   Textarea,
@@ -18,7 +18,8 @@ import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { addTicket, editTicket, getGroups, getTickets } from "../api/api";
 import { useSnackbar } from '../SnackbarContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { Ticket } from '../interfaces';
+import type { Ticket } from '../interfaces';
+import type { Media as TicketFormMedia } from '../interfaces/ticketForm';
 import { AppDispatch, RootState, setTickets } from '../store';
 
 export const New: FC<NavIdProps> = ({ id }) => {
@@ -52,53 +53,53 @@ export const New: FC<NavIdProps> = ({ id }) => {
     }
   }, []);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [images, setImages] = useState<File[]>([]);
-  const [date, setDate] = useState<Date>(() => new Date());
-  const [isSend, setIsSend] = useState(false);
-  const [groups, setGroups] = useState<{value: boolean, label: string}[][]>([]);
-  const [groupsVal, setGroupsVal] = useState<string[]>([]);
   const [groupsList, setGroupsList] = useState<string[][]>([]);
-  const [isDisabled, setIsDisabled] = useState(true);
-
   useEffect(() => {
-    getGroups().then((g) => {
-      setGroupsList(g);
-      setGroups(g.map(item => item.map(i => ({value: false, label: i}))));
+    getGroups().then((res) => {
+      setGroupsList(res);
     });
   }, []);
 
+  const [groupsOption, setGroupsOptions] = useState<{value: string, label: string}[]>([]);
   useEffect(() => {
-    if (groups[0] && groups[1])
-      setGroupsVal([...groups[0].filter(g => g.value).map(g => g.label), ...groups[1].filter(g => g.value).map(g => g.label)]);
-  }, [groups]);
+    if (groupsList.length < 2) return;
+    setGroupsOptions([
+      ...groupsList[0].map(g => ({ value: g, label: g })),
+      ...groupsList[1].map(g => ({ value: g, label: g })),
+    ]);
+  }, [groupsList]);
+
+  const [selectedGroups, setSelectedGroups] = useState<{value: string, label: string}[]>([]);
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState<TicketFormMedia[]>([]);
+  const [date, setDate] = useState<Date>(() => new Date());
+  const [isSend, setIsSend] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    setTitle(ticket?.title || "");
-    setDescription(ticket?.description || "");
-    setDate(ticket?.time ? new Date(ticket.time * 1000) : new Date());
+    if (!ticket) return;
 
-    if (groupsList.length > 0) {
-      ticket?.groups.map(g => {
-        const i = groupsList[0].findIndex(gl => gl == g);
-        if (i !== -1) updateGroups(0, i, true);
+    setTitle(ticket.title || "");
+    setDescription(ticket.description || "");
+    setDate(ticket.time ? new Date(ticket.time * 1000) : new Date());
+    setImages(ticket.media || []);
 
-        const j = groupsList[1].findIndex(gl => gl == g);
-        if (j !== -1) updateGroups(1, j, true);
+    if (groupsOption.length > 0 && ticket.groups.length > 0) {
+      const res: {value: string, label: string}[] = [];
+      groupsOption.forEach(g => {
+        if (ticket.groups.includes(g.value)) {
+          res.push(g);
+        }
       });
+      setSelectedGroups(res);
     }
-  }, [ticket, groupsList]);
+  }, [ticket, groupsOption]);
 
   useEffect(() => {
-    setIsDisabled(!title || !description || groupsVal.length == 0);
-  }, [title, description, groupsVal]);
-
-  const updateGroups = (i: number, j: number, val: boolean) => {
-    const res = {...groups};
-    res[i][j].value = val;
-    setGroups(res);
-  }
+    setIsDisabled(!title || !description);
+  }, [title, description]);
 
   const isStatus = (val: string): "default" | "valid" | "error" => {
     if (!isSend) return "default";
@@ -107,29 +108,36 @@ export const New: FC<NavIdProps> = ({ id }) => {
 
   const handleImages = (newFiles: FileList | null) => {
     // const types = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
-    if (newFiles)
-      setImages(prevFiles => [...prevFiles, ...Array.from(newFiles)]);
+    if (newFiles) {
+      const t = Array.from(newFiles).map(f => ({data: f, name: f.name}));
+      setImages(prevFiles => [...prevFiles, ...t]);
+    }
   }
 
   const deleteImage = (index: number) => {
     setImages(prevFiles => prevFiles.filter((_, i) => i !== index));
   }
 
-  const readFiles = async (files: File[]): Promise<{ data: ArrayBuffer, name: string }[]> => {
-    const readFile = (file: File): Promise<{ data: ArrayBuffer, name: string }> => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve({
-          data: reader.result as ArrayBuffer,
-          name: file.name,
-        });
-      };
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
+  const readFiles = async (media: TicketFormMedia[]): Promise<TicketFormMedia[]> => {
+    const readFile = (media: TicketFormMedia): Promise<TicketFormMedia> => new Promise((resolve, reject) => {
+      if (!media.index) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve({
+            data: reader.result as ArrayBuffer,
+            name: media.name,
+          });
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(media.data as File);
+      } else {
+        resolve(media);
+      }
     });
 
-    return Promise.all(files.map(readFile));
+    return Promise.all(media.map(readFile));
   };
+
 
   const sendForm = async () => {
     setIsSend(true);
@@ -140,7 +148,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
     const data = {
       title,
       content: description,
-      groups: groupsVal,
+      groups: selectedGroups.map(g => g.value),
       time: Math.floor(date.getTime() / 1000),
       media: fileBuffers,
     };
@@ -254,12 +262,13 @@ export const New: FC<NavIdProps> = ({ id }) => {
             top="Группы"
             required
           >
-            {groupsList[0]?.map((group, i) => (
-              <Checkbox checked={groups[0][i].value} key={i} onChange={(e) => updateGroups(0, i, e.target.checked)}>{ group }</Checkbox>
-            ))}
-            {groupsList[1]?.map((group, i) => (
-              <Checkbox checked={groups[1][i].value} description='На проверку' key={i} onChange={(e) => updateGroups(1, i, e.target.checked)}>{ group }</Checkbox>
-            ))}
+            <ChipsSelect
+              placeholder="Не выбраны"
+              options={groupsOption}
+              value={selectedGroups}
+              onChange={setSelectedGroups}
+              closeAfterSelect={false}
+            />
           </FormItem>
           <FormItem top="Выставите дату и время публикации" required>
             <DateInput

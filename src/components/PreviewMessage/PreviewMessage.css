@@ -60,6 +60,13 @@
 .file {
   display: flex;
   gap: 7px;
+  text-decoration: none;
+  transition: 0.2s;
+  border-radius: 100px;
+}
+
+.file:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .file:not(:first-child) {
@@ -85,4 +92,24 @@
   width: 100% !important;
   height: 200px !important;
   border-radius: 0;
+}
+
+/* Добавьте эти стили в ваш CSS-файл */
+.gallery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: background-color 0.32s ease;
+  /* animation: vkuianimation-fade-in .32s ease; */
+}
+
+.vkuiModalRoot__mask {
+  display: none;
 }
