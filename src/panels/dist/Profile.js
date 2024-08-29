@@ -5,11 +5,9 @@ var react_1 = require("react");
 var vkui_1 = require("@vkontakte/vkui");
 var icons_1 = require("@vkontakte/icons");
 var api_1 = require("../api/api");
-var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
 var SnackbarContext_1 = require("../SnackbarContext");
 exports.Profile = function (_a) {
     var id = _a.id;
-    var routeNavigator = vk_mini_apps_router_1.useRouteNavigator();
     var openError = SnackbarContext_1.useSnackbar().openError;
     var _b = react_1.useState(""), tgID = _b[0], setTgID = _b[1];
     var _c = react_1.useState(""), oldTgID = _c[0], setOldTgID = _c[1];
@@ -51,11 +49,6 @@ exports.Profile = function (_a) {
             });
         }
     };
-    var logout = function () {
-        localStorage.setItem("authToken", "");
-        routeNavigator.push('/');
-        location.reload();
-    };
     return (React.createElement(vkui_1.Panel, { id: id },
         React.createElement(vkui_1.PanelHeader, null, "\u041F\u0440\u043E\u0444\u0438\u043B\u044C"),
         React.createElement(vkui_1.Group, null,
@@ -69,7 +62,5 @@ exports.Profile = function (_a) {
                             React.createElement(vkui_1.IconButton, { label: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", onClick: function () { return sendForm('tg'); } },
                                 React.createElement(icons_1.Icon20Check, { width: 16, height: 16, color: 'green' })),
                             React.createElement(vkui_1.IconButton, { label: "\u041E\u0442\u043C\u0435\u043D\u0430", onClick: function () { return cancelField('tg'); } },
-                                React.createElement(icons_1.Icon28CrossLargeOutline, { width: 16, height: 16, color: 'red' }))))))),
-            React.createElement(vkui_1.Div, null,
-                React.createElement(vkui_1.Button, { onClick: logout, size: "m", stretched: true, appearance: "negative" }, "\u0412\u044B\u0439\u0442\u0438")))));
+                                React.createElement(icons_1.Icon28CrossLargeOutline, { width: 16, height: 16, color: 'red' }))))))))));
 };
