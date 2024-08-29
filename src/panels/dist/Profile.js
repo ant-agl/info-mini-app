@@ -64,3 +64,4 @@ exports.Profile = function (_a) {
                             React.createElement(vkui_1.IconButton, { label: "\u041E\u0442\u043C\u0435\u043D\u0430", onClick: function () { return cancelField('tg'); } },
                                 React.createElement(icons_1.Icon28CrossLargeOutline, { width: 16, height: 16, color: 'red' }))))))))));
 };
+exports["default"] = exports.Profile;

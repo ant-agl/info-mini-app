@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   View,
   SplitLayout,
@@ -14,9 +15,12 @@ import {
  } from '@vkontakte/vkui';
 import { Icon28NewsfeedOutline, Icon28UserCircleOutline } from '@vkontakte/icons';
 import { useActiveVkuiLocation, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Preview, Home, New, Profile } from './panels';
+const Preview = React.lazy(() => import('./panels/Preview'));
+const Home = React.lazy(() => import('./panels/Home'));
+const New = React.lazy(() => import('./panels/New'));
+const Profile = React.lazy(() => import('./panels/Profile'));
+
 import { DEFAULT_VIEW_PANELS } from './routes';
-import { useState, useEffect } from 'react';
 
 export const App = () => {
   const routeNavigator = useRouteNavigator();
@@ -102,3 +106,5 @@ export const App = () => {
     </SplitLayout>
   );
 };
+
+export default App;

@@ -52,3 +52,5 @@ export const MarkdownText: FC<MarkdownTextType> = ({ text }) => {
     <span dangerouslySetInnerHTML={{ __html: convertMarkdownV2ToHtml(text) }} />
   )
 };
+
+export default MarkdownText;

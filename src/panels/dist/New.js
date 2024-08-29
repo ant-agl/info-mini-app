@@ -235,3 +235,4 @@ exports.New = function (_a) {
             React.createElement(vkui_1.FormItem, null,
                 React.createElement(vkui_1.Button, { onClick: sendForm, before: React.createElement(icons_1.Icon20SendOutline, null), size: "m", stretched: true, disabled: isDisabled }, "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043D\u0430 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0443 / \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044E")))));
 };
+exports["default"] = exports.New;

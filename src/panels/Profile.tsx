@@ -102,17 +102,10 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               )}
             </Flex>
           </FormItem>
-          {/* <FormItem>
-            <Button
-              onClick={sendForm}
-              size="m"
-              stretched
-            >
-              Сохранить
-            </Button>
-          </FormItem> */}
         </FormLayoutGroup>
       </Group>
     </Panel>
   );
 };
+
+export default Profile;

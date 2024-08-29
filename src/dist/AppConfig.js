@@ -20,10 +20,11 @@ var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
 require("@vkontakte/vkui/dist/vkui.css");
 var react_redux_1 = require("react-redux");
 var store_1 = require("./store");
+var react_1 = require("react");
 var utils_1 = require("./utils");
 var routes_1 = require("./routes");
-var App_1 = require("./App");
-var react_1 = require("react");
+// import { App } from './App';
+var App = react_1["default"].lazy(function () { return Promise.resolve().then(function () { return require('./App'); }); });
 var SnackbarContext_1 = require("./SnackbarContext");
 var api_1 = require("./api/api");
 exports.AppConfig = function () {
@@ -82,16 +83,16 @@ exports.AppConfig = function () {
             setIsLoad(false);
         });
     }, [appId, appIdFetch, userId, userIdFetch]);
-    return (React.createElement(vkui_1.ConfigProvider, { appearance: vkBridgeAppearance, platform: vk_platform === 'desktop_web' ? 'vkcom' : undefined, isWebView: vk_bridge_1["default"].isWebView(), hasCustomPanelHeaderAfter: true },
-        React.createElement(vkui_1.AdaptivityProvider, __assign({}, adaptivity),
-            React.createElement(react_redux_1.Provider, { store: store_1["default"] },
-                React.createElement(vkui_1.AppRoot, { mode: "full", safeAreaInsets: vkBridgeInsets },
-                    React.createElement(vk_mini_apps_router_1.RouterProvider, { router: routes_1.router },
-                        React.createElement(SnackbarContext_1.SnackbarProvider, null,
+    return (react_1["default"].createElement(vkui_1.ConfigProvider, { appearance: vkBridgeAppearance, platform: vk_platform === 'desktop_web' ? 'vkcom' : undefined, isWebView: vk_bridge_1["default"].isWebView(), hasCustomPanelHeaderAfter: true },
+        react_1["default"].createElement(vkui_1.AdaptivityProvider, __assign({}, adaptivity),
+            react_1["default"].createElement(react_redux_1.Provider, { store: store_1["default"] },
+                react_1["default"].createElement(vkui_1.AppRoot, { mode: "full", safeAreaInsets: vkBridgeInsets },
+                    react_1["default"].createElement(vk_mini_apps_router_1.RouterProvider, { router: routes_1.router },
+                        react_1["default"].createElement(SnackbarContext_1.SnackbarProvider, null,
                             (!isDev && isLoad) &&
-                                React.createElement("h1", { style: { textAlign: 'center' } }, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."),
+                                react_1["default"].createElement("h1", { style: { textAlign: 'center' } }, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."),
                             (!isDev && !isLoad && !isAuth) &&
-                                React.createElement("h1", { style: { textAlign: 'center' } }, "\u041E\u0448\u0438\u0431\u043A\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438"),
+                                react_1["default"].createElement("h1", { style: { textAlign: 'center' } }, "\u041E\u0448\u0438\u0431\u043A\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438"),
                             (isDev || !isLoad && isAuth) &&
-                                React.createElement(App_1.App, null))))))));
+                                react_1["default"].createElement(App, null))))))));
 };

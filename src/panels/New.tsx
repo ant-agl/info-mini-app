@@ -294,3 +294,5 @@ export const New: FC<NavIdProps> = ({ id }) => {
     </Panel>
   );
 };
+
+export default New;

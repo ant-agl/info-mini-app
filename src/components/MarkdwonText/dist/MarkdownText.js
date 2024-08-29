@@ -37,3 +37,4 @@ exports.MarkdownText = function (_a) {
     var text = _a.text;
     return (React.createElement("span", { dangerouslySetInnerHTML: { __html: convertMarkdownV2ToHtml(text) } }));
 };
+exports["default"] = exports.MarkdownText;

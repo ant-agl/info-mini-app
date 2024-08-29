@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Div, Group, Header, ButtonGroup, Button, Spacing, FormItem, Textarea } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { getTickets } from '../api/api';
 import type { Ticket } from '../interfaces';
-import { PreviewMessage } from '../components/PreviewMessage/PreviewMessage';
+const PreviewMessage = React.lazy(() => import('../components/PreviewMessage/PreviewMessage'));
 import { sendForRevision, sendForPublication } from "../api/api";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
@@ -119,3 +119,5 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
     </Panel>
   );
 };
+
+export default Preview;

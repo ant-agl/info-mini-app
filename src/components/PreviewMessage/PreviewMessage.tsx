@@ -1,9 +1,9 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import ReactDOM from 'react-dom';
 import type { Ticket } from '../../interfaces';
 import { GridAvatar, ModalRoot, ModalPage, Gallery } from '@vkontakte/vkui';
 import "./PreviewMessage.css";
-import { MarkdownText } from '../MarkdwonText/MarkdownText';
+const MarkdownText = React.lazy(() => import('../MarkdwonText/MarkdownText'));
 import { Icon20DocumentOutline } from '@vkontakte/icons';
 
 interface PreviewMessageType {
@@ -26,7 +26,6 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
         <ModalPage id="gallery" onClose={() => setGalleryOpen(false)} style={{ background: 'none' }}>
           <Gallery
             slideWidth="100%"
-            // style={{ height: '100vh' }}
             bullets="dark"
             showArrows
             looped
@@ -77,7 +76,6 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
                 </div>
                 <div className="file__content">
                   <div className="file__name">{ file.name }</div>
-                  {/* <div className="file__size">{ Math.round(file.size * 10 / 1024) / 10 } KB</div> */}
                 </div>
               </a>
             ))}
@@ -95,3 +93,5 @@ export const PreviewMessage: FC<PreviewMessageType> = ({ ticket }) => {
     </div>
   )
 };
+
+export default PreviewMessage;
