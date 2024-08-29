@@ -23,7 +23,6 @@ var store_1 = require("./store");
 var react_1 = require("react");
 var utils_1 = require("./utils");
 var routes_1 = require("./routes");
-// import { App } from './App';
 var App = react_1["default"].lazy(function () { return Promise.resolve().then(function () { return require('./App'); }); });
 var SnackbarContext_1 = require("./SnackbarContext");
 var api_1 = require("./api/api");

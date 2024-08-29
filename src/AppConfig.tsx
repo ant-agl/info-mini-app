@@ -11,7 +11,6 @@ import store from './store';
 import React, { useEffect, useState } from 'react';
 import { transformVKBridgeAdaptivity } from './utils';
 import { router } from './routes';
-// import { App } from './App';
 const App = React.lazy(() => import('./App'));
 import { SnackbarProvider } from './SnackbarContext';
 
