@@ -1,9 +1,9 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import ReactDOM from 'react-dom';
 import type { Ticket } from '../../interfaces';
 import { GridAvatar, ModalRoot, ModalPage, Gallery } from '@vkontakte/vkui';
 import "./PreviewMessage.css";
-const MarkdownText = React.lazy(() => import('../MarkdwonText/MarkdownText'));
+import { MarkdownText } from '../MarkdwonText/MarkdownText';
 import { Icon20DocumentOutline } from '@vkontakte/icons';
 
 interface PreviewMessageType {

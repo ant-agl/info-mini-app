@@ -15,8 +15,8 @@ import {
  } from '@vkontakte/vkui';
 import { Icon28NewsfeedOutline, Icon28UserCircleOutline } from '@vkontakte/icons';
 import { useActiveVkuiLocation, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-const Preview = React.lazy(() => import('./panels/Preview'));
 const Home = React.lazy(() => import('./panels/Home'));
+const Preview = React.lazy(() => import('./panels/Preview'));
 const New = React.lazy(() => import('./panels/New'));
 const Profile = React.lazy(() => import('./panels/Profile'));
 

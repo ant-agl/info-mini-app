@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import {
   ContentCard,
   EllipsisText
 } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import type { Ticket } from '../../interfaces';
-const MarkdownText = React.lazy(() => import('../MarkdwonText/MarkdownText'));
+import { MarkdownText } from '../MarkdwonText/MarkdownText';
 import "./TicketCard.css";
 
 interface TicketCardType {
