@@ -1,1 +1,0 @@
-System.register(["./index-legacy-iboyzMez.js"],(function(e,s){"use strict";var t,i,r;return{setters:[e=>{t=e.j,i=e.R,r=e.a}],execute:function(){e("D",(e=>t.jsx(i,r({baseClassName:"vkuiDiv"},e))))}}}));

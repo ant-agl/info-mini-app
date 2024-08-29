@@ -1,1 +1,0 @@
-import{_ as n,j as r,T as m,a as p,c as v}from"./index-ITDkE3uC.js";const c={1:"vkuiTitle--level-1",2:"vkuiTitle--level-2",3:"vkuiTitle--level-3"},T=e=>{var{className:s,level:l="1",Component:t="span",normalize:a=!0,inline:o=!1}=e,i=n(e,["className","level","Component","normalize","inline"]);return r.jsx(m,p({Component:t,normalize:a,inline:o,className:v(s,c[l])},i))};export{T};
