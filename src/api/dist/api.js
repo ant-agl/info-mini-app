@@ -7,9 +7,8 @@ var mockData_1 = require("./mockData");
 var bencode_1 = require("bencode");
 var dev = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 var token = (_a = localStorage.token) !== null && _a !== void 0 ? _a : null;
-var logout = function () {
-    localStorage.setItem("token", "");
-    location.reload();
+var authError = function () {
+    document.body.innerHTML = '<h1 style="text-align: center; margin: 0;">Ошибка авторизации</h1>';
 };
 exports.api = axios_1["default"].create({
     baseURL: "https://quueydeperfoy.beget.app/api/",
@@ -52,8 +51,8 @@ function getTickets() {
         })["catch"](function (err) {
             var _a;
             console.log(err);
-            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401 && localStorage.token) {
-                logout();
+            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401) {
+                authError();
             }
             reject(err);
         });

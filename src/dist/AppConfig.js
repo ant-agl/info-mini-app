@@ -89,9 +89,9 @@ exports.AppConfig = function () {
                     react_1["default"].createElement(vk_mini_apps_router_1.RouterProvider, { router: routes_1.router },
                         react_1["default"].createElement(SnackbarContext_1.SnackbarProvider, null,
                             (!isDev && isLoad) &&
-                                react_1["default"].createElement("h1", { style: { textAlign: 'center' } }, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."),
+                                react_1["default"].createElement("h1", { style: { textAlign: 'center', margin: 0 } }, "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."),
                             (!isDev && !isLoad && !isAuth) &&
-                                react_1["default"].createElement("h1", { style: { textAlign: 'center' } }, "\u041E\u0448\u0438\u0431\u043A\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438"),
+                                react_1["default"].createElement("h1", { style: { textAlign: 'center', margin: 0 } }, "\u041E\u0448\u0438\u0431\u043A\u0430 \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438"),
                             (isDev || !isLoad && isAuth) &&
                                 react_1["default"].createElement(App, null))))))));
 };

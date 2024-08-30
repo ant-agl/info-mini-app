@@ -6,9 +6,8 @@ import bencode from "bencode";
 const dev = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 const token = localStorage.token ?? null;
 
-const logout = () => {
-  localStorage.setItem("token", "");
-  location.reload();
+const authError = () => {
+  document.body.innerHTML = '<h1 style="text-align: center; margin: 0;">Ошибка авторизации</h1>';
 }
 
 export const api = axios.create({
@@ -57,8 +56,8 @@ export function getTickets(): Promise<Ticket[]> {
       })
       .catch((err) => {
         console.log(err);
-        if (err?.response?.status == 401 && localStorage.token) {
-          logout();
+        if (err?.response?.status == 401) {
+          authError();
         }
         reject(err);
       });

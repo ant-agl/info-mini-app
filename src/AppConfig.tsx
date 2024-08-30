@@ -95,11 +95,11 @@ export const AppConfig = () => {
             <RouterProvider router={router}>
               <SnackbarProvider>
                 {(!isDev && isLoad) &&
-                  <h1 style={{textAlign: 'center'}}>Загрузка...</h1>
+                  <h1 style={{textAlign: 'center', margin: 0}}>Загрузка...</h1>
                 }
 
                 {(!isDev &&!isLoad && !isAuth) &&
-                  <h1 style={{textAlign: 'center'}}>Ошибка авторизации</h1>
+                  <h1 style={{textAlign: 'center', margin: 0}}>Ошибка авторизации</h1>
                 }
 
                 {(isDev || !isLoad && isAuth) &&
