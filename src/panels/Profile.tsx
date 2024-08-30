@@ -81,7 +81,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
                 name="tg-id"
                 placeholder="xxx"
                 value={tgID}
-                onChange={(e) => setTgID(parseInt(e.currentTarget.value))}
+                onChange={(e) => setTgID(parseInt(e.currentTarget.value) ? parseInt(e.currentTarget.value) : "")}
                 style={{width: '100%'}}
                 disabled={tgDisabled}
               />

@@ -56,7 +56,7 @@ exports.Profile = function (_a) {
             React.createElement(vkui_1.FormLayoutGroup, null,
                 React.createElement(vkui_1.FormItem, { top: "Telegram ID", htmlFor: "tg-id" },
                     React.createElement(vkui_1.Flex, { noWrap: true, gap: 'm' },
-                        React.createElement(vkui_1.Input, { getRef: tgInput, id: "tg-id", name: "tg-id", placeholder: "xxx", value: tgID, onChange: function (e) { return setTgID(parseInt(e.currentTarget.value)); }, style: { width: '100%' }, disabled: tgDisabled }),
+                        React.createElement(vkui_1.Input, { getRef: tgInput, id: "tg-id", name: "tg-id", placeholder: "xxx", value: tgID, onChange: function (e) { return setTgID(parseInt(e.currentTarget.value) ? parseInt(e.currentTarget.value) : ""); }, style: { width: '100%' }, disabled: tgDisabled }),
                         tgDisabled ? (React.createElement(vkui_1.IconButton, { label: "\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C", onClick: function () { return editField('tg'); } },
                             React.createElement(icons_1.Icon16Pen, { color: 'var(--vkui--color_text_accent_themed)' }))) : (React.createElement(vkui_1.Flex, { noWrap: true, style: { margin: 0 } },
                             React.createElement(vkui_1.IconButton, { label: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", onClick: function () { return sendForm('tg'); } },
