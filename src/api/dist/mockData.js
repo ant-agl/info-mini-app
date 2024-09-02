@@ -66,7 +66,7 @@ exports.tickets = [
             {
                 author: "admin",
                 text: "Test corrections",
-                sat: false
+                sat: true
             },
             {
                 author: "admin",

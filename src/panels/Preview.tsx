@@ -82,7 +82,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
 
                 <Div>
                   {ticket.corrections.map((corr, i) => (
-                    <p key={i}>{corr.text} ({corr.author})</p>
+                    <p key={i}>{corr.text} ({corr.author}) &mdash; {corr.sat ? 'исправлено' : 'ждет исправления'}</p>
                   ))}
                 </Div>
               </Group>

@@ -30,7 +30,7 @@ export function getTickets(): Promise<Ticket[]> {
       return;
     }
 
-    api.get("/wmc")
+    api.get("/correspondence")
       .then(res => {
         const decodeRes = bencode.decode( res.data );
         console.log(decodeRes);
@@ -49,6 +49,11 @@ export function getTickets(): Promise<Ticket[]> {
           })),
           offer: item.offer,
           authors: item.authors.map(g => new TextDecoder().decode(g)),
+          corrections: item.corrections.map(m => ({
+            author: new TextDecoder().decode(m.author),
+            text: new TextDecoder().decode(m.text),
+            sat: m.sat == 1,
+          })),
         }));
         console.log(data);
 

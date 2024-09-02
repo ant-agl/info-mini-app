@@ -4,6 +4,12 @@ interface Media {
   mimetype: ArrayBuffer;
 }
 
+interface Corrections {
+  author: ArrayBuffer;
+  text: ArrayBuffer;
+  sat: number
+}
+
 export default interface TicketDecode {
   index: ArrayBuffer;
   title: ArrayBuffer;
@@ -13,4 +19,5 @@ export default interface TicketDecode {
   media: Media[];
   offer: ArrayBuffer;
   authors: ArrayBuffer[];
+  corrections: Corrections[];
 }

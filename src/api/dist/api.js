@@ -27,7 +27,7 @@ function getTickets() {
             resolve(mockData_1.tickets);
             return;
         }
-        exports.api.get("/wmc")
+        exports.api.get("/correspondence")
             .then(function (res) {
             var decodeRes = bencode_1["default"].decode(res.data);
             console.log(decodeRes);
@@ -44,7 +44,12 @@ function getTickets() {
                     mimetype: new TextDecoder().decode(m.mimetype)
                 }); }),
                 offer: item.offer,
-                authors: item.authors.map(function (g) { return new TextDecoder().decode(g); })
+                authors: item.authors.map(function (g) { return new TextDecoder().decode(g); }),
+                corrections: item.corrections.map(function (m) { return ({
+                    author: new TextDecoder().decode(m.author),
+                    text: new TextDecoder().decode(m.text),
+                    sat: m.sat == 1
+                }); })
             }); });
             console.log(data);
             resolve(data);

@@ -65,7 +65,7 @@ export const tickets: Ticket[] = [
       {
         author: "admin",
         text: "Test corrections",
-        sat: false
+        sat: true
       },
       {
         author: "admin",
