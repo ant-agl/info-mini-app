@@ -47,7 +47,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
           }
         }).catch((err) => {
           routeNavigator.push("/");
-          openError(err.response.data || "Возникла ошибка")
+          openError(err.response?.data || "Возникла ошибка")
         });
       }
     }
@@ -161,7 +161,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
         routeNavigator.push('/');
       })
       .catch((err) => {
-        openError(err.response.data || "Возникла ошибка")
+        openError(err.response?.data || "Возникла ошибка")
       });
     } else {
       // обновление
@@ -169,7 +169,7 @@ export const New: FC<NavIdProps> = ({ id }) => {
         routeNavigator.push('/');
       })
       .catch((err) => {
-        openError(err.response.data || "Возникла ошибка")
+        openError(err.response?.data || "Возникла ошибка")
       });
     }
   }

@@ -32,18 +32,13 @@ export const AppConfig = () => {
 
   const isDev = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
-  useEffect(() => {
-    if (window.vk?.id) {
-      setUserId(window.vk.id);
-    }
-    setUserIdFetch(false);
-  }, []);
 
   useEffect(() => {
     bridge.send('VKWebAppGetLaunchParams')
       .then((data) => {
         if (data.vk_app_id) {
           setAppId(data.vk_app_id);
+          setUserId(data.vk_user_id);
         }
       })
       .catch((error) => {
@@ -51,6 +46,7 @@ export const AppConfig = () => {
       })
       .finally(() => {
         setAppIdFetch(false);
+        setUserIdFetch(false);
       });
   }, []);
 
@@ -98,7 +94,7 @@ export const AppConfig = () => {
                   <h1 style={{textAlign: 'center', margin: 0}}>Загрузка...</h1>
                 }
 
-                {(!isDev &&!isLoad && !isAuth) &&
+                {(!isDev && !isLoad && !isAuth) &&
                   <h1 style={{textAlign: 'center', margin: 0}}>Ошибка авторизации</h1>
                 }
 

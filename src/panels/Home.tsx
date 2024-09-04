@@ -33,7 +33,7 @@ export const Home: FC<NavIdProps> = ({ id }) => {
       dispatch(setTickets(t))
     })
     .catch((err) => {
-      openError(err.response.data || "Возникла ошибка")
+      openError(err.response?.data || "Возникла ошибка")
     });
     // }
   }, [dispatch, tickets.length]);

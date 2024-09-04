@@ -11,7 +11,7 @@ const authError = () => {
 }
 
 export const api = axios.create({
-  baseURL: "https://quueydeperfoy.beget.app/api/",
+  baseURL: "https://metodnikiforova.site/",
   headers: {
     "Content-Type": "application/x-bittorrent",
     Accept: "text/plain, */*",
@@ -20,7 +20,7 @@ export const api = axios.create({
 });
 
 function getUrl(img: ArrayBuffer): string {
-  return "https://quueydeperfoy.beget.app/assets/" + new TextDecoder().decode(img);
+  return "https://metodnikiforova.site/assets/" + new TextDecoder().decode(img);
 }
 
 export function getTickets(): Promise<Ticket[]> {
@@ -61,7 +61,7 @@ export function getTickets(): Promise<Ticket[]> {
       })
       .catch((err) => {
         console.log(err);
-        if (err?.response?.status == 401) {
+        if (err?.response?.status == 401 || err?.response?.status == 424) {
           authError();
         }
         reject(err);

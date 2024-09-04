@@ -77,8 +77,9 @@ exports.New = function (_a) {
                         routeNavigator.push("/");
                     }
                 })["catch"](function (err) {
+                    var _a;
                     routeNavigator.push("/");
-                    openError(err.response.data || "Возникла ошибка");
+                    openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
                 });
             }
         }
@@ -183,7 +184,8 @@ exports.New = function (_a) {
                         api_1.addTicket(data).then(function () {
                             routeNavigator.push('/');
                         })["catch"](function (err) {
-                            openError(err.response.data || "Возникла ошибка");
+                            var _a;
+                            openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
                         });
                     }
                     else {
@@ -191,7 +193,8 @@ exports.New = function (_a) {
                         api_1.editTicket(params.id, data).then(function () {
                             routeNavigator.push('/');
                         })["catch"](function (err) {
-                            openError(err.response.data || "Возникла ошибка");
+                            var _a;
+                            openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
                         });
                     }
                     return [2 /*return*/];

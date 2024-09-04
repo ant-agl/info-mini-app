@@ -32,7 +32,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
       }
     })
     .catch((err) => {
-      openError(err.response.data || "Возникла ошибка")
+      openError(err.response?.data || "Возникла ошибка")
     });
   }, []);
 
@@ -41,7 +41,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
     if (type == 'tg' && tgID) {
       saveBinding(type, tgID)
       .catch((err) => {
-        openError(err.response.data || "Возникла ошибка")
+        openError(err.response?.data || "Возникла ошибка")
       });
       setTgDisabled(true);
       setOldTgID(tgID);

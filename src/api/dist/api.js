@@ -11,7 +11,7 @@ var authError = function () {
     document.body.innerHTML = '<h1 style="text-align: center; margin: 0;">Ошибка авторизации</h1>';
 };
 exports.api = axios_1["default"].create({
-    baseURL: "https://quueydeperfoy.beget.app/api/",
+    baseURL: "https://metodnikiforova.site/",
     headers: {
         "Content-Type": "application/x-bittorrent",
         Accept: "text/plain, */*",
@@ -19,7 +19,7 @@ exports.api = axios_1["default"].create({
     }
 });
 function getUrl(img) {
-    return "https://quueydeperfoy.beget.app/assets/" + new TextDecoder().decode(img);
+    return "https://metodnikiforova.site/assets/" + new TextDecoder().decode(img);
 }
 function getTickets() {
     return new Promise(function (resolve, reject) {
@@ -54,9 +54,9 @@ function getTickets() {
             console.log(data);
             resolve(data);
         })["catch"](function (err) {
-            var _a;
+            var _a, _b;
             console.log(err);
-            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401) {
+            if (((_a = err === null || err === void 0 ? void 0 : err.response) === null || _a === void 0 ? void 0 : _a.status) == 401 || ((_b = err === null || err === void 0 ? void 0 : err.response) === null || _b === void 0 ? void 0 : _b.status) == 424) {
                 authError();
             }
             reject(err);

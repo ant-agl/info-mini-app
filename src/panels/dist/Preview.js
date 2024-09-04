@@ -36,8 +36,9 @@ exports.Preview = function (_a) {
                         routeNavigator.push("/");
                     }
                 })["catch"](function (err) {
+                    var _a;
                     routeNavigator.push("/");
-                    openError(err.response.data || "Возникла ошибка");
+                    openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
                 });
             }
         }
@@ -46,14 +47,16 @@ exports.Preview = function (_a) {
         api_2.sendForRevision(id, reason).then(function () {
             routeNavigator.push("/");
         })["catch"](function (err) {
-            openError(err.response.data || "Возникла ошибка");
+            var _a;
+            openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
         });
     }
     function btnPublication(id) {
         api_2.sendForPublication(id).then(function () {
             routeNavigator.push("/");
         })["catch"](function (err) {
-            openError(err.response.data || "Возникла ошибка");
+            var _a;
+            openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
         });
     }
     return (react_1["default"].createElement(vkui_1.Panel, { id: id },

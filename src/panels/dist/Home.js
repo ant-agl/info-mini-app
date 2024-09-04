@@ -21,7 +21,8 @@ exports.Home = function (_a) {
         api_1.getTickets().then(function (t) {
             dispatch(store_1.setTickets(t));
         })["catch"](function (err) {
-            openError(err.response.data || "Возникла ошибка");
+            var _a;
+            openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
         });
         // }
     }, [dispatch, tickets.length]);

@@ -39,22 +39,17 @@ exports.AppConfig = function () {
     var _f = react_1.useState(true), userIdFetch = _f[0], setUserIdFetch = _f[1];
     var isDev = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
     react_1.useEffect(function () {
-        var _a;
-        if ((_a = window.vk) === null || _a === void 0 ? void 0 : _a.id) {
-            setUserId(window.vk.id);
-        }
-        setUserIdFetch(false);
-    }, []);
-    react_1.useEffect(function () {
         vk_bridge_2["default"].send('VKWebAppGetLaunchParams')
             .then(function (data) {
             if (data.vk_app_id) {
                 setAppId(data.vk_app_id);
+                setUserId(data.vk_user_id);
             }
         })["catch"](function (error) {
             console.log(error);
         })["finally"](function () {
             setAppIdFetch(false);
+            setUserIdFetch(false);
         });
     }, []);
     react_1.useEffect(function () {

@@ -20,14 +20,16 @@ exports.Profile = function (_a) {
                 setOldTgID(bindings.tg);
             }
         })["catch"](function (err) {
-            openError(err.response.data || "Возникла ошибка");
+            var _a;
+            openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
         });
     }, []);
     var sendForm = function (type) {
         console.log('save', type, tgID);
         if (type == 'tg' && tgID) {
             api_1.saveBinding(type, tgID)["catch"](function (err) {
-                openError(err.response.data || "Возникла ошибка");
+                var _a;
+                openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
             });
             setTgDisabled(true);
             setOldTgID(tgID);

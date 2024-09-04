@@ -36,7 +36,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
           }
         }).catch((err) => {
           routeNavigator.push("/");
-          openError(err.response.data || "Возникла ошибка")
+          openError(err.response?.data || "Возникла ошибка")
         });
       }
     }
@@ -47,7 +47,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
       routeNavigator.push("/");
     })
     .catch((err) => {
-      openError(err.response.data || "Возникла ошибка")
+      openError(err.response?.data || "Возникла ошибка")
     });
   }
   function btnPublication(id: string) {
@@ -55,7 +55,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
       routeNavigator.push("/");
     })
     .catch((err) => {
-      openError(err.response.data || "Возникла ошибка")
+      openError(err.response?.data || "Возникла ошибка")
     });
   }
 
