@@ -11,7 +11,7 @@ const authError = () => {
 }
 
 export const api = axios.create({
-  baseURL: "https://metodnikiforova.site/",
+  baseURL: "https://metodnikiforova.site/api",
   headers: {
     "Content-Type": "application/x-bittorrent",
     Accept: "text/plain, */*",
@@ -195,14 +195,17 @@ export function getGroups(): Promise<string[][]> {
         ],
         [
           'group3'
-        ]
+        ],
+        []
       ]);
       return;
     }
 
     api.get(`/groups`)
       .then(res => {
-        resolve(res.data);
+        const decodeRes = bencode.decode( res.data );
+        const resData = decodeRes.map((arr: ArrayBuffer[]) => arr.map(g => new TextDecoder().decode(g)));
+        resolve(resData);
       })
       .catch((err) => {
         console.log(err);

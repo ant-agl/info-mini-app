@@ -11,7 +11,7 @@ var authError = function () {
     document.body.innerHTML = '<h1 style="text-align: center; margin: 0;">Ошибка авторизации</h1>';
 };
 exports.api = axios_1["default"].create({
-    baseURL: "https://metodnikiforova.site/",
+    baseURL: "https://metodnikiforova.site/api",
     headers: {
         "Content-Type": "application/x-bittorrent",
         Accept: "text/plain, */*",
@@ -176,13 +176,16 @@ function getGroups() {
                 ],
                 [
                     'group3'
-                ]
+                ],
+                []
             ]);
             return;
         }
         exports.api.get("/groups")
             .then(function (res) {
-            resolve(res.data);
+            var decodeRes = bencode_1["default"].decode(res.data);
+            var resData = decodeRes.map(function (arr) { return arr.map(function (g) { return new TextDecoder().decode(g); }); });
+            resolve(resData);
         })["catch"](function (err) {
             console.log(err);
             reject(err);
