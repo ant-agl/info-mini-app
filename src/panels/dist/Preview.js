@@ -43,6 +43,23 @@ exports.Preview = function (_a) {
             }
         }
     }, []);
+    var _d = react_1.useState([]), groups = _d[0], setGroups = _d[1];
+    react_1.useEffect(function () {
+        api_2.getGroups().then(function (res) {
+            setGroups(res);
+        });
+    }, []);
+    var _e = react_1.useState(false), isRightPost = _e[0], setIsRightPost = _e[1];
+    react_1.useEffect(function () {
+        if (!ticket || !groups || ticket.offer)
+            return;
+        var res = true;
+        ticket.groups.forEach(function (g) {
+            if (!groups[0].includes(g))
+                res = false;
+        });
+        setIsRightPost(res);
+    }, [groups, ticket]);
     function btnRevision(id, reason) {
         api_2.sendForRevision(id, reason).then(function () {
             routeNavigator.push("/");
@@ -67,7 +84,7 @@ exports.Preview = function (_a) {
                 ticket &&
                     react_1["default"].createElement(PreviewMessage, { ticket: ticket }),
                 react_1["default"].createElement(vkui_1.Spacing, { size: 32 }),
-                !ticket.offer && (react_1["default"].createElement("div", null,
+                isRightPost && (react_1["default"].createElement("div", null,
                     react_1["default"].createElement(vkui_1.Group, { style: { maxWidth: 450, margin: "0 auto" } },
                         react_1["default"].createElement(vkui_1.Header, null, "\u0421\u043F\u0438\u0441\u043E\u043A \u043A\u043E\u0440\u0440\u0435\u043A\u0442\u0438\u0440\u043E\u0432\u043E\u043A"),
                         react_1["default"].createElement(vkui_1.Div, null, ticket.corrections.map(function (corr, i) { return (react_1["default"].createElement("p", { key: i },

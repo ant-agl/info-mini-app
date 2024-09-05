@@ -45,7 +45,7 @@ exports.tickets = [
     {
         "title": "testing",
         "groups": [
-            "all", "group3"
+            "all", "group1"
         ],
         "time": 1722871320,
         "description": "admins content\n\nwith some *attri__butes__*\n",

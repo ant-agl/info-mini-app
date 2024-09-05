@@ -4,7 +4,7 @@ import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { getTickets } from '../api/api';
 import type { Ticket } from '../interfaces';
 const PreviewMessage = React.lazy(() => import('../components/PreviewMessage/PreviewMessage'));
-import { sendForRevision, sendForPublication } from "../api/api";
+import { sendForRevision, sendForPublication, getGroups } from "../api/api";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { setTickets } from '../store';
@@ -42,6 +42,25 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
     }
   }, []);
 
+  const [groups, setGroups] = useState<string[][]>([]);
+  useEffect(() => {
+    getGroups().then((res) => {
+      setGroups(res);
+    });
+  }, []);
+
+  const [isRightPost, setIsRightPost] = useState(false);
+  useEffect(() => {
+    if (!ticket || !groups || ticket.offer) return;
+
+    let res = true;
+    ticket.groups.forEach((g: string) => {
+      if (!groups[0].includes(g)) res = false;
+    });
+
+    setIsRightPost(res);
+  }, [groups, ticket]);
+
   function btnRevision(id: string, reason: string) {
     sendForRevision(id, reason).then(() => {
       routeNavigator.push("/");
@@ -75,7 +94,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
 
           <Spacing size={32} />
 
-          {!ticket.offer && (
+          {isRightPost && (
             <div>
               <Group style={{ maxWidth: 450, margin: "0 auto" }}>
                 <Header>Список корректировок</Header>
