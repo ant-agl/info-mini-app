@@ -28,14 +28,12 @@ export const Home: FC<NavIdProps> = ({ id }) => {
   const tickets = useSelector((state: RootState) => state.tickets.tickets);
 
   useEffect(() => {
-    // if (tickets.length === 0) {
     getTickets().then((t) => {
-      dispatch(setTickets(t))
+      dispatch(setTickets(t));
     })
     .catch((err) => {
       openError(err.response?.data || "Возникла ошибка")
     });
-    // }
   }, [dispatch, tickets.length]);
 
   return (

@@ -51,7 +51,7 @@ export const Preview: FC<NavIdProps> = ({ id }) => {
 
   const [isRightPost, setIsRightPost] = useState(false);
   useEffect(() => {
-    if (!ticket || !groups || !ticket.offer) return;
+    if (!ticket || groups.length == 0 || !ticket.offer) return;
 
     let res = true;
     ticket.groups.forEach((g: string) => {

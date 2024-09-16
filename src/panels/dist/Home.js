@@ -17,14 +17,12 @@ exports.Home = function (_a) {
     var dispatch = react_redux_1.useDispatch();
     var tickets = react_redux_1.useSelector(function (state) { return state.tickets.tickets; });
     react_1.useEffect(function () {
-        // if (tickets.length === 0) {
         api_1.getTickets().then(function (t) {
             dispatch(store_1.setTickets(t));
         })["catch"](function (err) {
             var _a;
             openError(((_a = err.response) === null || _a === void 0 ? void 0 : _a.data) || "Возникла ошибка");
         });
-        // }
     }, [dispatch, tickets.length]);
     return (React.createElement(vkui_1.Panel, { id: id },
         React.createElement(vkui_1.PanelHeader, null, "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 \u0438\u043D\u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u0414\u0413\u0422\u0423"),
