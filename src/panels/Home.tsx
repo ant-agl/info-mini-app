@@ -55,22 +55,6 @@ export const Home: FC<NavIdProps> = ({ id }) => {
 
       <Group>
         <Header>Список неподтвержденных тикетов</Header>
-        {tickets.filter(t => !t.offer).length > 0 &&
-          <CardGrid size="m">
-            {tickets.filter(t => !t.offer).map((ticket: Ticket) => (
-              <TicketCard key={ticket.id} ticket={ticket} />
-            ))}
-          </CardGrid>
-        }
-        {tickets.filter(t => !t.offer).length == 0 &&
-          <Div>
-            <Text style={{textAlign: 'center', opacity: 0.5}}>Пусто</Text>
-          </Div>
-        }
-      </Group>
-
-      <Group>
-        <Header>Список тикетов, ожидающих публикации</Header>
         {tickets.filter(t => t.offer).length > 0 &&
           <CardGrid size="m">
             {tickets.filter(t => t.offer).map((ticket: Ticket) => (
@@ -79,6 +63,22 @@ export const Home: FC<NavIdProps> = ({ id }) => {
           </CardGrid>
         }
         {tickets.filter(t => t.offer).length == 0 &&
+          <Div>
+            <Text style={{textAlign: 'center', opacity: 0.5}}>Пусто</Text>
+          </Div>
+        }
+      </Group>
+
+      <Group>
+        <Header>Список тикетов, ожидающих публикации</Header>
+        {tickets.filter(t => !t.offer).length > 0 &&
+          <CardGrid size="m">
+            {tickets.filter(t => !t.offer).map((ticket: Ticket) => (
+              <TicketCard key={ticket.id} ticket={ticket} />
+            ))}
+          </CardGrid>
+        }
+        {tickets.filter(t => !t.offer).length == 0 &&
           <Div>
             <Text style={{textAlign: 'center', opacity: 0.5}}>Пусто</Text>
           </Div>

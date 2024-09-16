@@ -51,7 +51,7 @@ exports.Preview = function (_a) {
     }, []);
     var _e = react_1.useState(false), isRightPost = _e[0], setIsRightPost = _e[1];
     react_1.useEffect(function () {
-        if (!ticket || !groups || ticket.offer)
+        if (!ticket || !groups || !ticket.offer)
             return;
         var res = true;
         ticket.groups.forEach(function (g) {

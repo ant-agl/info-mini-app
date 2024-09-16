@@ -32,16 +32,16 @@ exports.Home = function (_a) {
             React.createElement(vkui_1.Button, { mode: "tertiary", stretched: true, align: 'left', onClick: function () { routeNavigator.push('/new'); }, before: React.createElement(icons_1.Icon28AddOutline, { width: 18, height: 18 }) }, "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043D\u043E\u0432\u044B\u0439 \u0442\u0438\u043A\u0435\u0442")),
         React.createElement(vkui_1.Group, null,
             React.createElement(vkui_1.Header, null, "\u0421\u043F\u0438\u0441\u043E\u043A \u043D\u0435\u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u043D\u044B\u0445 \u0442\u0438\u043A\u0435\u0442\u043E\u0432"),
-            tickets.filter(function (t) { return !t.offer; }).length > 0 &&
-                React.createElement(vkui_1.CardGrid, { size: "m" }, tickets.filter(function (t) { return !t.offer; }).map(function (ticket) { return (React.createElement(TicketCard_1.TicketCard, { key: ticket.id, ticket: ticket })); })),
-            tickets.filter(function (t) { return !t.offer; }).length == 0 &&
+            tickets.filter(function (t) { return t.offer; }).length > 0 &&
+                React.createElement(vkui_1.CardGrid, { size: "m" }, tickets.filter(function (t) { return t.offer; }).map(function (ticket) { return (React.createElement(TicketCard_1.TicketCard, { key: ticket.id, ticket: ticket })); })),
+            tickets.filter(function (t) { return t.offer; }).length == 0 &&
                 React.createElement(vkui_1.Div, null,
                     React.createElement(vkui_1.Text, { style: { textAlign: 'center', opacity: 0.5 } }, "\u041F\u0443\u0441\u0442\u043E"))),
         React.createElement(vkui_1.Group, null,
             React.createElement(vkui_1.Header, null, "\u0421\u043F\u0438\u0441\u043E\u043A \u0442\u0438\u043A\u0435\u0442\u043E\u0432, \u043E\u0436\u0438\u0434\u0430\u044E\u0449\u0438\u0445 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438"),
-            tickets.filter(function (t) { return t.offer; }).length > 0 &&
-                React.createElement(vkui_1.CardGrid, { size: "m" }, tickets.filter(function (t) { return t.offer; }).map(function (ticket) { return (React.createElement(TicketCard_1.TicketCard, { key: ticket.id, ticket: ticket })); })),
-            tickets.filter(function (t) { return t.offer; }).length == 0 &&
+            tickets.filter(function (t) { return !t.offer; }).length > 0 &&
+                React.createElement(vkui_1.CardGrid, { size: "m" }, tickets.filter(function (t) { return !t.offer; }).map(function (ticket) { return (React.createElement(TicketCard_1.TicketCard, { key: ticket.id, ticket: ticket })); })),
+            tickets.filter(function (t) { return !t.offer; }).length == 0 &&
                 React.createElement(vkui_1.Div, null,
                     React.createElement(vkui_1.Text, { style: { textAlign: 'center', opacity: 0.5 } }, "\u041F\u0443\u0441\u0442\u043E")))));
 };
