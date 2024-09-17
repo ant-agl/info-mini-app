@@ -6,7 +6,15 @@ var vk_mini_apps_router_1 = require("@vkontakte/vk-mini-apps-router");
 var MarkdownText_1 = require("../MarkdwonText/MarkdownText");
 require("./TicketCard.css");
 function getDate(time) {
-    return new Date(time * 1000).toLocaleString();
+    var options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+    return new Date(time * 1000).toLocaleString('ru-RU', options);
 }
 exports.TicketCard = function (_a) {
     var ticket = _a.ticket;

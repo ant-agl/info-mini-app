@@ -8,7 +8,15 @@ require("./PreviewMessage.css");
 var MarkdownText_1 = require("../MarkdwonText/MarkdownText");
 var icons_1 = require("@vkontakte/icons");
 function getDate(time) {
-    return new Date(time * 1000).toLocaleString();
+    var options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+    return new Date(time * 1000).toLocaleString('ru-RU', options);
 }
 exports.PreviewMessage = function (_a) {
     var ticket = _a.ticket;

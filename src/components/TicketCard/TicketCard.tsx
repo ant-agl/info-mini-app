@@ -13,7 +13,15 @@ interface TicketCardType {
 }
 
 function getDate(time: number): string {
-  return new Date(time * 1000).toLocaleString();
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  };
+  return new Date(time * 1000).toLocaleString('ru-RU', options);
 }
 
 export const TicketCard: FC<TicketCardType> = ({ ticket }) => {
