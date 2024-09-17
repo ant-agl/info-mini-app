@@ -108,7 +108,7 @@ function sendForRevision(id, reason) {
             resolve(true);
             return;
         }
-        exports.api.post("/reject/" + id, bencode_1["default"].encode(reason))
+        exports.api.put("/reject/" + id, bencode_1["default"].encode(reason))
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {
@@ -124,7 +124,7 @@ function sendForPublication(id) {
             resolve(true);
             return;
         }
-        exports.api.get("/appr/" + id)
+        exports.api.put("/approve/" + id)
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {
@@ -157,7 +157,7 @@ function saveBinding(proto, contact) {
             resolve(true);
             return;
         }
-        exports.api.get("/bind/" + proto + "/" + contact)
+        exports.api.put("/bind/" + proto + "/" + contact)
             .then(function (res) {
             resolve(res.data);
         })["catch"](function (err) {

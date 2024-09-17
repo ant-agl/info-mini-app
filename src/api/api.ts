@@ -120,7 +120,7 @@ export function sendForRevision(id: string, reason: string) {
       return;
     }
 
-    api.post("/reject/" + id, bencode.encode(reason))
+    api.put("/reject/" + id, bencode.encode(reason))
       .then(res => {
         resolve(res.data);
       })
@@ -138,7 +138,7 @@ export function sendForPublication(id: string) {
       return;
     }
 
-    api.get("/appr/" + id)
+    api.put("/approve/" + id)
       .then(res => {
         resolve(res.data);
       })
@@ -175,7 +175,7 @@ export function saveBinding(proto: string, contact: number) {
       return;
     }
 
-    api.get(`/bind/${proto}/${contact}`)
+    api.put(`/bind/${proto}/${contact}`)
       .then(res => {
         resolve(res.data);
       })
